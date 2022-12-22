@@ -4,6 +4,7 @@ using Final.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    partial class HomezillaContextModelSnapshot : ModelSnapshot
+    [Migration("20221222064720_init10")]
+    partial class init10
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,8 +49,8 @@ namespace HomeZillaBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("MobileNumber")
-                        .HasColumnType("bigint");
+                    b.Property<int?>("MobileNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
@@ -170,8 +173,8 @@ namespace HomeZillaBackend.Migrations
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("MobileNumber")
-                        .HasColumnType("bigint");
+                    b.Property<int>("MobileNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
@@ -196,17 +199,27 @@ namespace HomeZillaBackend.Migrations
                     b.Property<int?>("Price")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("ProviderId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Service")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProviderId");
-
                     b.ToTable("ProviderServices");
+                });
+
+            modelBuilder.Entity("ProviderProviderServices", b =>
+                {
+                    b.Property<Guid>("ProviderIdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ServiceIdId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProviderIdId", "ServiceIdId");
+
+                    b.HasIndex("ServiceIdId");
+
+                    b.ToTable("ProviderProviderServices");
                 });
 
             modelBuilder.Entity("Customer", b =>
@@ -246,15 +259,19 @@ namespace HomeZillaBackend.Migrations
                     b.Navigation("provider");
                 });
 
-            modelBuilder.Entity("Final.Entities.ProviderServices", b =>
+            modelBuilder.Entity("ProviderProviderServices", b =>
                 {
-                    b.HasOne("Final.Entities.Provider", "Provider")
-                        .WithMany("Service")
-                        .HasForeignKey("ProviderId")
+                    b.HasOne("Final.Entities.Provider", null)
+                        .WithMany()
+                        .HasForeignKey("ProviderIdId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Provider");
+                    b.HasOne("Final.Entities.ProviderServices", null)
+                        .WithMany()
+                        .HasForeignKey("ServiceIdId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Final.Entities.Authentication", b =>
@@ -262,11 +279,6 @@ namespace HomeZillaBackend.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Provider");
-                });
-
-            modelBuilder.Entity("Final.Entities.Provider", b =>
-                {
-                    b.Navigation("Service");
                 });
 #pragma warning restore 612, 618
         }

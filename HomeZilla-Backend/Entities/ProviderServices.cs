@@ -6,8 +6,9 @@ namespace Final.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public virtual ICollection<Provider>? ProviderId { get; set; }
-        public ServiceList? Service { get; set; }
+        public Guid ProviderId { get; set; }
+        public virtual Provider? Provider { get; set; }
+        public ServiceList Service { get; set; }
         public int? Price { get; set; }
 
     }

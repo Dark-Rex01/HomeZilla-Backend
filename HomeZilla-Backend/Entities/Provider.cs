@@ -15,8 +15,8 @@ namespace Final.Entities
         [Required]
         public string? Email { get; set; }
         [Required]
-        public int MobileNumber { get; set; }
-        public string? Location { get; set; }
+        public long MobileNumber { get; set; }
+        public string Location { get; set; } = String.Empty;
         public string? Description { get; set; }
 
         [ForeignKey("provider")]
@@ -24,7 +24,7 @@ namespace Final.Entities
         public virtual Authentication? provider { get; set; }
         public string? ProfilePicture { get; set; }
 
-        public virtual ICollection<ProviderServices>? ServiceId { get; set; }
+        public virtual ICollection<ProviderServices> Service { get; set; } = new HashSet<ProviderServices>();
 
     }
 }

@@ -91,7 +91,7 @@ namespace Final.Services
                     Provider provider = new();
                     provider = _mapper.Map<RegisterRequest, Provider>(Request);
                     var res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
-                    provider.Id= res.AuthId;
+                    provider.ProviderUserID= res.AuthId;
                     _context.Provider.Add(provider);
                     await _context.SaveChangesAsync();
                 }

@@ -21,7 +21,7 @@ namespace Final.Model.Auth
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         public string? Password { get; set; }
         [Required]
-        public int? MobileNumber { get; set; }
+        public long MobileNumber { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

@@ -20,7 +20,7 @@ public class Customer
     [Required]
     public string? UserName { get; set; }
 
-    public int ? MobileNumber { get; set; }
+    public long ? MobileNumber { get; set; }
     public string? Address { get; set; }
 
     [ForeignKey("customer")]

@@ -2,6 +2,7 @@ using Final.Authorization;
 using Final.Data;
 using Final.Helpers;
 using Final.MailServices;
+using Final.Repositories.Search;
 using Final.Services;
 using Lucene.Net.Support;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IAuthRepo, AuthRepo>();
+builder.Services.AddScoped<ISearchRepo, SearchRepo>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -37,6 +39,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -51,6 +54,12 @@ app.UseHttpsRedirection();
 
 // global error handler
 app.UseMiddleware<ErrorHandler>();
+
+// global cors policy
+app.UseCors(x => x
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
 
 app.UseAuthorization();
 

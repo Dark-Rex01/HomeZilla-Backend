@@ -64,7 +64,7 @@ namespace Final.Controllers
             return Ok(new { message = "Reset password after OTP verification!" });
         }
 
-        [HttpPost("Reset-Password")]
+        [HttpPut("Reset-Password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest Request)
         {
             await _authService.ResetPassword(Request);

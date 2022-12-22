@@ -8,6 +8,6 @@ namespace HomeZilla_Backend.Models.Auth
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string? Email { get; set; }
         [Required]
-        public string? OTP { get; set; }
+        public int? OTP { get; set; }
     }
 }

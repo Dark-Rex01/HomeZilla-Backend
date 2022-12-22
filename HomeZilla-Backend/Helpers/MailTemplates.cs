@@ -2,7 +2,7 @@
 {
     public class MailTemplates
     {
-        public string GetOtpTemplate(string otp, int expiry)
+        public string GetOtpTemplate(int? otp, int expiry)
         {
             return string.Format(@"
           <!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Transitional//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"">
@@ -157,7 +157,7 @@ a[x-apple-data-detectors] {{
 </html>
           ", otp, expiry);
         }
-        public string GetPasswordResetTemplate(string otp, int expiry)
+        public string GetPasswordResetTemplate(int? otp, int expiry)
         {
             return string.Format(
               @"

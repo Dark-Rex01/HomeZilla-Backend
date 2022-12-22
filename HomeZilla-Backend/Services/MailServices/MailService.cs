@@ -11,18 +11,17 @@ namespace Final.MailServices
         {
             _configuration = configuration;
         }
-        public async Task Send(string toAddress, string subject, string body)
+        public async Task Send(string ToAddress, string subject, string body)
         {
             
-            string SmtpServer = _configuration.GetSection("MailSettings:SmtpHost").Value;
+            string? SmtpServer = _configuration.GetSection("MailSettings:SmtpHost").Value;
             int Port = int.Parse(_configuration.GetSection("MailSettings:Port").Value);
 
-            string fromAddress = _configuration.GetSection("MailSettings:MailAddress").Value;
-            string Password = _configuration.GetSection("MailSettings:Password").Value;
-            Console.WriteLine("okkkkkkkkkkkk");
+            string? FromAddress = _configuration.GetSection("MailSettings:MailAddress").Value;
+            string? Password = _configuration.GetSection("MailSettings:Password").Value;
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(fromAddress));
-            email.To.Add(MailboxAddress.Parse(toAddress));
+            email.From.Add(MailboxAddress.Parse(FromAddress));
+            email.To.Add(MailboxAddress.Parse(ToAddress));
 
             email.Subject = subject;
 
@@ -33,7 +32,7 @@ namespace Final.MailServices
                 smtp.Connect(SmtpServer, Port);
 
                 smtp.Authenticate(
-                    fromAddress,
+                    FromAddress,
                     Password
                 );
 

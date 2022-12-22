@@ -13,6 +13,7 @@ using System.Runtime.Intrinsics.X86;
 using Microsoft.EntityFrameworkCore;
 using Final.MailServices;
 using HomeZilla_Backend.Models.Auth;
+using Realms.Sync;
 
 namespace Final.Services
 {
@@ -37,13 +38,15 @@ namespace Final.Services
             _mapper = mapper;
             _mailer = mailer;
         }
+        
 
+        // Login
         public async Task<string> Authenticate(AuthenticateRequest Request)
         {
             var User = await _context.Authentication.SingleOrDefaultAsync(x => x.Email == Request.Email);
             if(User == null || !User.IsVerified || !BCrypt.Net.BCrypt.Verify(Request.Password,User.PasswordHash) )
             {
-                throw new BadHttpRequestException("Credentials are incorrect");
+                throw new BadHttpRequestException("Credentials are Incorrect");
             }
             // authentication successful
             var Token = _jwtUtils.GenerateToken(User);
@@ -92,6 +95,9 @@ namespace Final.Services
                     _context.Provider.Add(provider);
                     await _context.SaveChangesAsync();
                 }
+
+                string Template = mailTemplate.GetOtpTemplate(_user.OTP, 30);
+                await _mailer.Send(_user.Email, "Account Verification OTP", Template);
             }
 
             else
@@ -102,7 +108,7 @@ namespace Final.Services
         }
     
       
-        //verification
+        //Verification
         public async Task Verify(VerifyAccount VerifyData)
         {
             var UserData = _context.Authentication.SingleOrDefault(x => x.OTP== VerifyData.OTP && (x.Email == VerifyData.Email && DateTime.Now <= x.OTPExpiresAt));
@@ -120,42 +126,39 @@ namespace Final.Services
             
         }
 
-        //forgot password 
+        //Forgot Password 
 
-        public async Task ForgotPassword(ForgotPasswordRequest request)
+        public async Task ForgotPassword(ForgotPasswordRequest Request)
         {
-            var user = _context.Authentication.SingleOrDefault(
-                x => (x.Email == request.email) && !x.IsDeleted);
+            var User = await _context.Authentication.SingleOrDefaultAsync(
+                x => (x.Email == Request.Email) && x.IsVerified);
 
-            if (user == null) throw new BadHttpRequestException("User not found");
+            if (User == null) throw new BadHttpRequestException("User not found");
 
-            user.OTP = GenerateOtp();
-            Console.WriteLine(user.OTP);
-            user.OTPExpiresAt = DateTime.Now.AddMinutes(5);
-            Console.WriteLine(user.OTPExpiresAt);
-            string template = mailTemplate.GetPasswordResetTemplate(user.OTP, 10);
-            await _mailer.Send(user.Email, "Password Reset Email Send", template);
-            _context.Authentication.Update(user);
+            User.OTP = GenerateOtp();
+            User.OTPExpiresAt = DateTime.Now.AddMinutes(5);
+            string Template = mailTemplate.GetPasswordResetTemplate(User.OTP, 5);
+            await _mailer.Send(User.Email, "Password Reset OTP", Template);
+            _context.Authentication.Update(User);
             await _context.SaveChangesAsync();
         }
 
-        //reset password
+        //Reset password
 
-        public async Task ResetPassword(ResetPasswordRequest request)
+        public async Task ResetPassword(ResetPasswordRequest Request)
         {
-            var user = GetUserByOtp(request.Otp);
-            if(user == null || user.OTPExpiresAt < DateTime.Now)
+            var User = await _context.Authentication.SingleOrDefaultAsync(x => x.OTP == Request.OTP && x.Email == Request.Email); ;
+            if(User == null || DateTime.Now > User.OTPExpiresAt)
             {
                 throw new BadHttpRequestException("Invalid OTP");
             }
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.password);
-            user.PasswordResetAt = DateTime.Now;
-            user.OTP = null;
-            user.OTPExpiresAt = DateTime.MinValue;
-
-            _context.Authentication.Update(user);
-            await _context.SaveChangesAsync();
-
+            else
+            {
+                User.PasswordHash = BCrypt.Net.BCrypt.HashPassword(Request.Password);
+                User.PasswordResetAt = DateTime.Now;
+                _context.Authentication.Update(User);
+                await _context.SaveChangesAsync();
+            }
         }
 
         //logout
@@ -168,16 +171,11 @@ namespace Final.Services
 
         //OTP Generation
 
-        private Authentication GetUserByOtp(string otp)
-        {
-            return _context.Authentication.SingleOrDefault(x => x.OTP == otp);
-        }
-
-        private string GenerateOtp()
+        private int GenerateOtp()
         {
             Random random = new Random();
             int otp = random.Next(100000, 999999);
-            return otp.ToString();
+            return otp;
         }
 
         public async Task<Authentication> GetUser(string email ="")

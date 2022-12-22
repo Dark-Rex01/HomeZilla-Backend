@@ -8,11 +8,11 @@ namespace Final.Services
     {
         Task<string> Authenticate(AuthenticateRequest model);
         Task Register(RegisterRequest Request);
-        Task ForgotPassword(ForgotPasswordRequest request);
-        Task ResetPassword(ResetPasswordRequest request);
+        Task ForgotPassword(ForgotPasswordRequest Request);
+        Task ResetPassword(ResetPasswordRequest Request);
         Task Verify(VerifyAccount VerifyData);
 
-        Task Logout(LogoutRequest request);
+        Task Logout(LogoutRequest Request);
     }
 
 }

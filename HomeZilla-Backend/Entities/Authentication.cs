@@ -23,7 +23,7 @@ namespace Final.Entities
 
         //OTP verification
 
-        public string? OTP { get; set; }
+        public int? OTP { get; set; }
         public DateTime? OTPExpiresAt { get; set; }
 
         //Verification

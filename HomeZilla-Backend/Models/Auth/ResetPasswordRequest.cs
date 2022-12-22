@@ -4,11 +4,16 @@ namespace Final.Model.Auth
 {
     public class ResetPasswordRequest
     {
-        public string? Otp{ get; set; }
+        public int? OTP{ get; set; }
         [Required]
-        public string? password { get; set; }
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        public string? Password { get; set; }
         [Required]
-        [Compare("password")]
-        public string?  confirmPassword{ get; set; }
+        [Compare("Password")]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
+        public string?  ConfirmPassword{ get; set; }
+        [Required]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
+        public string? Email { get; set; }
     }
 }

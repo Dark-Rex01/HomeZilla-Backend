@@ -57,32 +57,18 @@ namespace Final.Controllers
             return Ok(new { message = "User has been Verified successfully" });
         }
         
-        [HttpPost("forgot-password")]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest request)
+        [HttpPost("Forgot-Password")]
+        public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest Request)
         {
-            try
-            {
-                await _authService.ForgotPassword(request);
-                return Ok(new { message = "Reset password after OTP verification!" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _authService.ForgotPassword(Request);
+            return Ok(new { message = "Reset password after OTP verification!" });
         }
 
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordRequest request)
+        [HttpPost("Reset-Password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordRequest Request)
         {
-            try
-            {
-                await _authService.ResetPassword(request);
-                return Ok(new { message = "Your Password has been changed successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _authService.ResetPassword(Request);
+            return Ok(new { message = "Your Password has been changed successfully" });
         }
 
         [HttpPost("logout")]

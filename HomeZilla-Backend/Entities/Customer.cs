@@ -28,6 +28,4 @@ public class Customer
     public Guid CustomerUserID { get; set; }
     public virtual Authentication? customer { get; set; }
     public string? ProfilePicture { get; set; }
-
-
 }

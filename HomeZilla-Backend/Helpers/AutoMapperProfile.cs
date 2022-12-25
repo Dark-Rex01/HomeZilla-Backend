@@ -2,6 +2,7 @@
 using Final.Entities;
 using Final.Model.Auth;
 using Final.Model.CustomerDashboard;
+using Final.Model.Order;
 using Final.Model.Search;
 using HomeZilla_Backend.Models.Search;
 
@@ -28,6 +29,9 @@ namespace Final.Helpers
             CreateMap<Provider, ProviderList>();
             CreateMap<Provider, ProviderData>();
             CreateMap<ProviderServices, ServiceData>();
+
+            // Order 
+            CreateMap<BookOrder, OrderDetails>();
 
         }
     }

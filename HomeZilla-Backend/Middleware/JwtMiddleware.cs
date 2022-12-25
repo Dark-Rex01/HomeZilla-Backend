@@ -2,6 +2,7 @@
 
 using Final.Data;
 using Final.Services;
+using Microsoft.Extensions.Primitives;
 
 public class JwtMiddleware
 {
@@ -14,13 +15,13 @@ public class JwtMiddleware
 
     public async Task Invoke(HttpContext context, IAuthRepo customerService, IJwtUtils jwtUtils, HomezillaContext _context)
     {
+        
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-        var userId = jwtUtils.ValidateToken(token);
-        if (userId != null)
+        var userData = jwtUtils.ValidateToken(token);
+        if (userData != null)
         {
-            Console.WriteLine(userId);
             // attach user to context on successful jwt validation
-            context.Items["User"] = await _context.Customer.FindAsync(userId);  
+            context.Items["User"] = userData;  
         }
 
         await _next(context);

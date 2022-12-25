@@ -13,9 +13,13 @@ namespace Final.Entities
         public ServiceList ServiceName { get; set; }
         public OrderStatus Status { get; set; } = 0;
 
+        public Guid CustomerId { get; set; }
+        public Guid ProviderId { get; set; }
         // Relationship
-        public Customer? customerDetails { get; set; }
-        public Provider? providerDetails { get; set; }
+        [ForeignKey("CustomerId")]
+        public virtual Customer? customer { get; set; }
+        [ForeignKey("ProviderId")]
+        public virtual Provider? provider { get; set; }
 
     }
 }

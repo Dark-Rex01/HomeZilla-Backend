@@ -17,6 +17,7 @@ namespace Final.Model.Search
         public int MobileNumber { get; set; }
         public string? Location { get; set; }
         public string? Description { get; set; }
+        public Guid ProviderUserID { get; set; }
         public List<ServiceData> ServiceData{ get; set; } = new List<ServiceData>();
     }
 }

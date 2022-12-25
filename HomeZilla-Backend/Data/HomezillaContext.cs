@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Reflection.Metadata;
 using Final.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,7 +32,6 @@ public partial class HomezillaContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         OnModelCreatingPartial(modelBuilder);
-
 
     }
 

@@ -1,5 +1,6 @@
 ﻿using Final.Entities;
 using Final.Helpers;
+using HomeZilla_Backend.Models.Jwt;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +13,8 @@ namespace Final.Authorization
     public interface IJwtUtils
     {
         public string GenerateToken(Authentication user);
-        public int? ValidateToken(string token);
+        public JwtData ValidateToken(string token);
+        public Guid GetUserId(HttpContext httpContext);
     }
 
     public class JwtUtils : IJwtUtils
@@ -31,9 +33,9 @@ namespace Final.Authorization
             // generate token that is valid for 7 days
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.UserRole.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim("email", user.Email),
+                new Claim("role", user.UserRole.ToString()),
+                new Claim("name", user.UserName),
                 new Claim("id", user.AuthId.ToString())
 
             };
@@ -57,11 +59,10 @@ namespace Final.Authorization
             return jwt;
         }
 
-        public int? ValidateToken(string token)
+        public JwtData ValidateToken(string token)
         {
             if (token == null)
                 return null;
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             try
@@ -77,16 +78,23 @@ namespace Final.Authorization
                 }, out SecurityToken validatedToken);
 
                 var jwtToken = (JwtSecurityToken)validatedToken;
-                var userId = int.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
-
+                var PayLoad = new JwtData();
+                PayLoad.Id = new Guid(jwtToken.Claims.First(claim => claim.Type == "id").Value);
+                PayLoad.Role = (Role)Enum.Parse(typeof(Role), jwtToken.Claims.First(claim => claim.Type == "role").Value);
                 // return user id from JWT token if validation successful
-                return userId;
+                return PayLoad;
             }
             catch
             {
                 // return null if validation fails
                 return null;
             }
+        }
+
+        public Guid GetUserId(HttpContext httpContext)
+        {
+            var data = (JwtData)httpContext.Items["User"];
+            return data.Id;
         }
     }
 }

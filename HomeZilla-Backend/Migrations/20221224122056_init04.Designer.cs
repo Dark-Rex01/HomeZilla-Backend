@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    [Migration("20221222084611_init12")]
-    partial class init12
+    [Migration("20221224122056_init04")]
+    partial class init04
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,23 +128,23 @@ namespace HomeZillaBackend.Migrations
                     b.Property<DateTime>("AppointmentTo")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ProviderId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("ServiceName")
                         .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("customerDetailsId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("providerDetailsId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("customerDetailsId");
+                    b.HasIndex("CustomerId");
 
-                    b.HasIndex("providerDetailsId");
+                    b.HasIndex("ProviderId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -171,6 +171,7 @@ namespace HomeZillaBackend.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("MobileNumber")
@@ -225,17 +226,21 @@ namespace HomeZillaBackend.Migrations
 
             modelBuilder.Entity("Final.Entities.OrderDetails", b =>
                 {
-                    b.HasOne("Customer", "customerDetails")
+                    b.HasOne("Customer", "customer")
                         .WithMany()
-                        .HasForeignKey("customerDetailsId");
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Final.Entities.Provider", "providerDetails")
+                    b.HasOne("Final.Entities.Provider", "provider")
                         .WithMany()
-                        .HasForeignKey("providerDetailsId");
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("customerDetails");
+                    b.Navigation("customer");
 
-                    b.Navigation("providerDetails");
+                    b.Navigation("provider");
                 });
 
             modelBuilder.Entity("Final.Entities.Provider", b =>

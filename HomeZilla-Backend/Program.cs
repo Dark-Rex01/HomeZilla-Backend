@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text.Json.Serialization;
+using HomeZilla_Backend.Repositories.Customers;
+using HomeZilla_Backend.Services.BlobServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +22,12 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 // Service Dependecy Injection
 builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IBlobService, BlobService>();
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 builder.Services.AddScoped<IAuthRepo, AuthRepo>();
 builder.Services.AddScoped<ISearchRepo, SearchRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
+builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -55,7 +59,7 @@ builder.Services.AddSwaggerGen(
              options.SwaggerDoc("v1", new OpenApiInfo
              {
                  Version = "v1",
-                 Title = "Glint API",
+                 Title = "HomeZilla API",
                  Description = "Api for Home Service Portal",
                  // TermsOfService = new Uri(""),
                  Contact = new OpenApiContact

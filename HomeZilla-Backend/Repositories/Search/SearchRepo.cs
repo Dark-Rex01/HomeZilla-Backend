@@ -34,8 +34,8 @@ namespace Final.Repositories.Search
             searchResult = await _context.Provider.Where(x => Ids.Contains(x.Id) && x.Location.StartsWith(SearchData.Location))
                                                   .ToListAsync();
             int count = searchResult.Count();
-            searchResult = searchResult.Skip((SearchData.PageNumber - 1) * 1)
-                                       .Take(1)
+            searchResult = searchResult.Skip((SearchData.PageNumber - 1) * 5)
+                                       .Take(5)
                                        .ToList();
             var Response = new SearchResponse();
             Response.Data = searchResult.Select(x => _mapper.Map<Provider, ProviderList>(x));

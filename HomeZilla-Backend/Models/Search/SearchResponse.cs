@@ -10,6 +10,6 @@ namespace Final.Model.Search
         public int CurrentPage { get; set; }
         [Required]
         public int TotalPages { get; set; }
-        public IEnumerable<ProviderList> Data { get; set; }
+        public IEnumerable<ProviderList> Data { get; set; } = Enumerable.Empty<ProviderList>();
     }
 }

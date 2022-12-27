@@ -4,6 +4,7 @@ using Final.Model.Auth;
 using Final.Model.CustomerDashboard;
 using Final.Model.Order;
 using Final.Model.Search;
+using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Search;
 
 namespace Final.Helpers
@@ -32,6 +33,11 @@ namespace Final.Helpers
 
             // Order 
             CreateMap<BookOrder, OrderDetails>();
+
+            // Customer 
+            CreateMap<Customer, UserData>();
+            CreateMap<UpdateData, Customer>();
+            CreateMap<OrderDetails, OrderData>();
 
         }
     }

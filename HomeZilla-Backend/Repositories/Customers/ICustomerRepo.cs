@@ -4,8 +4,8 @@ namespace HomeZilla_Backend.Repositories.Customers
 {
     public interface ICustomerRepo
     {
-        Task<UserData?> GetUserData(Guid Id);
-        Task<UserData?> UpdateUserData(UpdateData Data, Guid Id);
+        Task<CustomerUserData?> GetUserData(Guid Id);
+        Task<CustomerUserData?> UpdateUserData(CustomerUpdateData Data, Guid Id);
         Task ChangePassword(ChangePassword Data, Guid Id);
         Task<OrderResponse> CurrentOrder(OrderQuery Data, Guid Id);
         Task<OrderResponse> PastOrder(OrderQuery Data, Guid Id);

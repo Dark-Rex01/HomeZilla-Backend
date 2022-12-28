@@ -16,6 +16,7 @@ namespace Final.Entities
         public string? Email { get; set; }
         [Required]
         public long MobileNumber { get; set; }
+        public string? UserName { get; set; }
         public string Location { get; set; } = String.Empty;
         public string? Description { get; set; }
 
@@ -25,6 +26,7 @@ namespace Final.Entities
         public string? ProfilePicture { get; set; }
 
         public virtual ICollection<ProviderServices> Service { get; set; } = new HashSet<ProviderServices>();
+        public virtual ICollection<OrderDetails> OrderDeatils { get; set; } = new List<OrderDetails>();
 
     }
 }

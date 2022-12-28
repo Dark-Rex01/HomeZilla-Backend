@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    [Migration("20221224115453_init03")]
-    partial class init03
+    [Migration("20221227152211_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,10 +128,10 @@ namespace HomeZillaBackend.Migrations
                     b.Property<DateTime>("AppointmentTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProviderId")
+                    b.Property<Guid?>("ProviderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ServiceName")
@@ -183,6 +183,9 @@ namespace HomeZillaBackend.Migrations
                     b.Property<Guid>("ProviderUserID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProviderUserID")
@@ -227,16 +230,12 @@ namespace HomeZillaBackend.Migrations
             modelBuilder.Entity("Final.Entities.OrderDetails", b =>
                 {
                     b.HasOne("Customer", "customer")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrderDeatils")
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("Final.Entities.Provider", "provider")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrderDeatils")
+                        .HasForeignKey("ProviderId");
 
                     b.Navigation("customer");
 
@@ -267,7 +266,7 @@ namespace HomeZillaBackend.Migrations
 
             modelBuilder.Entity("Customer", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("OrderDeatils");
                 });
 
             modelBuilder.Entity("Final.Entities.Authentication", b =>
@@ -279,7 +278,7 @@ namespace HomeZillaBackend.Migrations
 
             modelBuilder.Entity("Final.Entities.Provider", b =>
                 {
-                    b.Navigation("OrderDetails");
+                    b.Navigation("OrderDeatils");
 
                     b.Navigation("Service");
                 });

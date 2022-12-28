@@ -68,6 +68,7 @@ namespace HomeZillaBackend.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MobileNumber = table.Column<long>(type: "bigint", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ProviderUserID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -93,20 +94,20 @@ namespace HomeZillaBackend.Migrations
                     AppointmentTo = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ServiceName = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    customerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    providerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Customer_customerId",
-                        column: x => x.customerId,
+                        name: "FK_OrderDetails_Customer_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "Customer",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Provider_providerId",
-                        column: x => x.providerId,
+                        name: "FK_OrderDetails_Provider_ProviderId",
+                        column: x => x.ProviderId,
                         principalTable: "Provider",
                         principalColumn: "Id");
                 });
@@ -138,14 +139,14 @@ namespace HomeZillaBackend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_customerId",
+                name: "IX_OrderDetails_CustomerId",
                 table: "OrderDetails",
-                column: "customerId");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_providerId",
+                name: "IX_OrderDetails_ProviderId",
                 table: "OrderDetails",
-                column: "providerId");
+                column: "ProviderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Provider_ProviderUserID",

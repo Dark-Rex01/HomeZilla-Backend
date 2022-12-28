@@ -5,6 +5,7 @@ using Final.Model.CustomerDashboard;
 using Final.Model.Order;
 using Final.Model.Search;
 using HomeZilla_Backend.Models.Customers;
+using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Models.Search;
 
 namespace Final.Helpers
@@ -35,9 +36,18 @@ namespace Final.Helpers
             CreateMap<BookOrder, OrderDetails>();
 
             // Customer 
-            CreateMap<Customer, UserData>();
-            CreateMap<UpdateData, Customer>();
+            CreateMap<Customer, CustomerUserData>();
+            CreateMap<CustomerUpdateData, Customer>();
             CreateMap<OrderDetails, OrderData>();
+
+            // Provider
+            CreateMap<Provider, ProviderUserData>();
+            CreateMap<ProviderUpdateData, Provider>();
+            CreateMap<AddService, ProviderServices>()
+                .ForMember(o => o.Service, ex => ex.MapFrom(o => Enum.Parse(typeof(ServiceList), o.Service)));
+            CreateMap<UpdateService, ProviderServices>()
+                .ForMember(o => o.Service, ex => ex.MapFrom(o => Enum.Parse(typeof(ServiceList), o.Service)));
+            CreateMap<ProviderServices, GetService>();
 
         }
     }

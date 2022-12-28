@@ -54,18 +54,11 @@ namespace HomeZilla_Backend.Services.BlobServices
         // Generate File Name
         private string GenerateFileName(string fileName)
         {
-            try
-            {
                 string strFileName = string.Empty;
                 string[] strName = fileName.Split('.');
                 strFileName = DateTime.Now.ToUniversalTime().ToString("yyyyMMdd\\THHmmssfff") + "." +
                    strName[strName.Length - 1];
                 return strFileName;
-            }
-            catch (Exception ex)
-            {
-                return fileName;
-            }
         }
     }
 }

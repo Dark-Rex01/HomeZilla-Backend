@@ -21,14 +21,14 @@ namespace HomeZilla_Backend.Controllers
         }
 
         [HttpGet("Get-User-Data"), Authorize(Role.Customer)]
-        public async Task<ActionResult<UserData>> GetUserInfo()
+        public async Task<ActionResult<CustomerUserData>> GetUserInfo()
         {
             var response = await _customerRepo.GetUserData(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
 
         [HttpPut("Update-User-Data"), Authorize(Role.Customer)]
-        public async Task<ActionResult<UserData>> UpdateCustomerData([FromBody] UpdateData Data)
+        public async Task<ActionResult<CustomerUserData>> UpdateCustomerData([FromBody] CustomerUpdateData Data)
         {
             var Response = await _customerRepo.UpdateUserData(Data, _jwtUtils.GetUserId(HttpContext));
             return Ok(Response);

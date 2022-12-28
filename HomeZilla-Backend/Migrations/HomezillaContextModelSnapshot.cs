@@ -125,10 +125,10 @@ namespace HomeZillaBackend.Migrations
                     b.Property<DateTime>("AppointmentTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProviderId")
+                    b.Property<Guid?>("ProviderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ServiceName")
@@ -180,6 +180,9 @@ namespace HomeZillaBackend.Migrations
                     b.Property<Guid>("ProviderUserID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProviderUserID")
@@ -224,16 +227,12 @@ namespace HomeZillaBackend.Migrations
             modelBuilder.Entity("Final.Entities.OrderDetails", b =>
                 {
                     b.HasOne("Customer", "customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrderDeatils")
+                        .HasForeignKey("CustomerId");
 
                     b.HasOne("Final.Entities.Provider", "provider")
-                        .WithMany()
-                        .HasForeignKey("ProviderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrderDeatils")
+                        .HasForeignKey("ProviderId");
 
                     b.Navigation("customer");
 
@@ -262,6 +261,11 @@ namespace HomeZillaBackend.Migrations
                     b.Navigation("Provider");
                 });
 
+            modelBuilder.Entity("Customer", b =>
+                {
+                    b.Navigation("OrderDeatils");
+                });
+
             modelBuilder.Entity("Final.Entities.Authentication", b =>
                 {
                     b.Navigation("Customer");
@@ -271,6 +275,8 @@ namespace HomeZillaBackend.Migrations
 
             modelBuilder.Entity("Final.Entities.Provider", b =>
                 {
+                    b.Navigation("OrderDeatils");
+
                     b.Navigation("Service");
                 });
 #pragma warning restore 612, 618

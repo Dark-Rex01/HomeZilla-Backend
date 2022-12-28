@@ -1,10 +1,8 @@
-﻿using Final.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace HomeZilla_Backend.Models.Customers
+namespace HomeZilla_Backend.Models.Providers
 {
-    public class UserData
+    public class ProviderUpdateData
     {
         [Required]
         public string? FirstName { get; set; }
@@ -17,7 +15,7 @@ namespace HomeZilla_Backend.Models.Customers
         public string? UserName { get; set; }
 
         public long? MobileNumber { get; set; }
-        public string? Address { get; set; }
-        public string? ProfilePicture { get; set; }
+        public string Location { get; set; } = String.Empty;
+        public string? Description { get; set; }
     }
 }

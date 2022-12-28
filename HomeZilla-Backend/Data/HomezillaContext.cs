@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 using Final.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,9 +32,19 @@ public partial class HomezillaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        OnModelCreatingPartial(modelBuilder);
+        modelBuilder.Entity<OrderDetails>()
+                    .HasOne(x => x.customer)
+                    .WithMany(t => t.OrderDeatils)
+                    .HasForeignKey(m => m.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
 
+        modelBuilder.Entity<OrderDetails>()
+                    .HasOne(m => m.provider)
+                    .WithMany(t => t.OrderDeatils)
+                    .HasForeignKey(m => m.ProviderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+        //OnModelCreatingPartial(modelBuilder);
     }
 
-    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+   // partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

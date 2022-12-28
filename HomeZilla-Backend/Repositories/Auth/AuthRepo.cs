@@ -14,8 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Final.MailServices;
 using HomeZilla_Backend.Models.Auth;
 using Realms.Sync;
+using Final.Services;
 
-namespace Final.Services
+namespace HomeZilla_Backend.Repositories.Auth
 {
 
     public class AuthRepo : IAuthRepo
@@ -38,13 +39,13 @@ namespace Final.Services
             _mapper = mapper;
             _mailer = mailer;
         }
-        
+
 
         // Login
         public async Task<string> Authenticate(AuthenticateRequest Request)
         {
             var User = await _context.Authentication.SingleOrDefaultAsync(x => x.Email == Request.Email);
-            if(User == null || !User.IsVerified || !BCrypt.Net.BCrypt.Verify(Request.Password,User.PasswordHash) )
+            if (User == null || !User.IsVerified || !BCrypt.Net.BCrypt.Verify(Request.Password, User.PasswordHash))
             {
                 throw new BadHttpRequestException("Credentials are Incorrect");
             }
@@ -56,9 +57,9 @@ namespace Final.Services
         // Register User
         public async Task Register(RegisterRequest Request)
         {
-            
+
             // validate
-            if(! await _context.Authentication.AnyAsync(x => x.Email == Request.Email))
+            if (!await _context.Authentication.AnyAsync(x => x.Email == Request.Email))
             {
                 _user = _mapper.Map<RegisterRequest, Authentication>(Request);
                 _user.CreatedAt = DateTime.Now;
@@ -73,25 +74,25 @@ namespace Final.Services
 
                 _context.Authentication.Add(_user);
                 await _context.SaveChangesAsync();
-            
-           
+
+
                 if (Request.UserRole == Role.Customer.ToString())
                 {
                     Customer customer = new();
                     customer = _mapper.Map<RegisterRequest, Customer>(Request);
                     var res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
-                    customer.CustomerUserID= res.AuthId;
+                    customer.CustomerUserID = res.AuthId;
                     _context.Customer.Add(customer);
                     await _context.SaveChangesAsync();
                 }
 
 
-                if(Request.UserRole == Role.Provider.ToString())
+                if (Request.UserRole == Role.Provider.ToString())
                 {
                     Provider provider = new();
                     provider = _mapper.Map<RegisterRequest, Provider>(Request);
                     var res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
-                    provider.ProviderUserID= res.AuthId;
+                    provider.ProviderUserID = res.AuthId;
                     _context.Provider.Add(provider);
                     await _context.SaveChangesAsync();
                 }
@@ -106,14 +107,14 @@ namespace Final.Services
             }
 
         }
-    
-      
+
+
         //Verification
         public async Task Verify(VerifyAccount VerifyData)
         {
-            var UserData = _context.Authentication.SingleOrDefault(x => x.OTP== VerifyData.OTP && (x.Email == VerifyData.Email && DateTime.Now <= x.OTPExpiresAt));
+            var UserData = _context.Authentication.SingleOrDefault(x => x.OTP == VerifyData.OTP && x.Email == VerifyData.Email && DateTime.Now <= x.OTPExpiresAt);
             if (UserData == null) throw new KeyNotFoundException("Invalid OTP or Expired");
-            if(UserData.IsVerified)
+            if (UserData.IsVerified)
             {
                 throw new KeyNotFoundException("User Already Verified");
             }
@@ -123,7 +124,7 @@ namespace Final.Services
                 UserData.IsVerified = true;
                 await _context.SaveChangesAsync();
             }
-            
+
         }
 
         //Forgot Password 
@@ -131,7 +132,7 @@ namespace Final.Services
         public async Task ForgotPassword(ForgotPasswordRequest Request)
         {
             var User = await _context.Authentication.SingleOrDefaultAsync(
-                x => (x.Email == Request.Email) && x.IsVerified);
+                x => x.Email == Request.Email && x.IsVerified);
 
             if (User == null) throw new BadHttpRequestException("User not found");
 
@@ -148,7 +149,7 @@ namespace Final.Services
         public async Task ResetPassword(ResetPasswordRequest Request)
         {
             var User = await _context.Authentication.SingleOrDefaultAsync(x => x.OTP == Request.OTP && x.Email == Request.Email); ;
-            if(User == null || DateTime.Now > User.OTPExpiresAt)
+            if (User == null || DateTime.Now > User.OTPExpiresAt)
             {
                 throw new BadHttpRequestException("Invalid OTP");
             }
@@ -178,16 +179,16 @@ namespace Final.Services
             return otp;
         }
 
-        public async Task<Authentication> GetUser(string email ="")
+        public async Task<Authentication> GetUser(string email = "")
         {
             Authentication? result = new();
-            if(email != "")
+            if (email != "")
             {
                 result = await _context.Authentication.Where(u => u.Email == email).FirstOrDefaultAsync();
             }
             return result!;
         }
-        
-        }
+
     }
+}
 

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿
+
+using AutoMapper;
 using Final.Entities;
 using Final.Model.Auth;
 using Final.Model.CustomerDashboard;
@@ -19,13 +21,6 @@ namespace Final.Helpers
                 .ForMember(o => o.UserRole, ex => ex.MapFrom(o => Enum.Parse(typeof(Role), o.UserRole)));
             CreateMap<RegisterRequest, Customer>();
             CreateMap<RegisterRequest, Provider>();
-
-
-            CreateMap<Customer, CustomerDetailsRequest>();
-
-            CreateMap<CustomerDetailsRequest, Customer>();
-
-            CreateMap<OrderDetails, OrderDetailsResponse>();
 
             // Search
             CreateMap<Provider, ProviderList>();

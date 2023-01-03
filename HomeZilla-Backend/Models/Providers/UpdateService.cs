@@ -6,7 +6,7 @@ namespace HomeZilla_Backend.Models.Providers
     public class UpdateService : IValidatableObject
     {
         public Guid Id { get; set; }
-        public string? Service { get; set; }
+        public string Service { get; set; } = String.Empty;
         public int? Price { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)

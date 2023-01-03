@@ -5,6 +5,7 @@ using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Services.BlobServices;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Authentication;
 
 namespace HomeZilla_Backend.Repositories.Providers
 {
@@ -55,7 +56,7 @@ namespace HomeZilla_Backend.Repositories.Providers
             var Query = await _context.Authentication.Where(x => x.AuthId == Id).SingleOrDefaultAsync();
             if (!BCrypt.Net.BCrypt.Verify(Data.OldPassword, Query.PasswordHash))
             {
-                throw new BadHttpRequestException("Credentials are Incorrect");
+                throw new AuthenticationException("Password is Incorrect"); 
             }
             else
             {

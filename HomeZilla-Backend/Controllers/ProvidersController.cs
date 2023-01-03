@@ -26,8 +26,8 @@ namespace HomeZilla_Backend.Controllers
         [HttpGet("Get-User-Data"), Authorize(Role.Provider)]
         public async Task<ActionResult<ProviderUserData>> GetUserInfo()
         {
-            var response = await _providerRepo.GetUserData(_jwtUtils.GetUserId(HttpContext));
-            return Ok(response);
+            var Response = await _providerRepo.GetUserData(_jwtUtils.GetUserId(HttpContext));
+            return Ok(Response);
         }
 
         [HttpPut("Update-User-Data"), Authorize(Role.Provider)]

@@ -1,5 +1,6 @@
 ﻿using Realms.Sync.Exceptions;
 using System.Net;
+using System.Security.Authentication;
 using System.Text.Json;
 
 namespace Final.Helpers
@@ -26,13 +27,17 @@ namespace Final.Helpers
 
                 switch (error)
                 {
-                    case AppException e:
+                    case BadHttpRequestException e:
                         // custom application error
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
                     case KeyNotFoundException e:
                         // not found error
                         response.StatusCode = (int)HttpStatusCode.NotFound;
+                        break;
+                    case AuthenticationException e:
+                        // not found error
+                        response.StatusCode = (int)HttpStatusCode.Forbidden;
                         break;
                     default:
                         // unhandled error

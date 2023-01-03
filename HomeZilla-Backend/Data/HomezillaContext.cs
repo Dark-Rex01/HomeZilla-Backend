@@ -43,8 +43,8 @@ public partial class HomezillaContext : DbContext
                     .WithMany(t => t.OrderDeatils)
                     .HasForeignKey(m => m.ProviderId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
-        //OnModelCreatingPartial(modelBuilder);
+        OnModelCreatingPartial(modelBuilder);
     }
 
-   // partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

@@ -87,7 +87,7 @@ builder.Services.Configure<Final.Helpers.AppSettings>(builder.Configuration.GetS
 
 // Injecting DbContext and Connection String
 builder.Services.AddDbContext<HomezillaContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("_connectionString")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
 
 
 // JSON Serializer
@@ -116,7 +116,10 @@ app.UseMiddleware<ErrorHandler>();
 app.UseCors(x => x
     .AllowAnyOrigin()
     .AllowAnyMethod()
-    .AllowAnyHeader());
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .WithExposedHeaders("Authorization")
+    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
 
 app.UseMiddleware<JwtMiddleware>();
 

@@ -11,7 +11,7 @@ namespace HomeZilla_Backend.Helpers
             _extensions = extensions;
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             var file = value as IFormFile;
             var extension = Path.GetExtension(file.FileName);

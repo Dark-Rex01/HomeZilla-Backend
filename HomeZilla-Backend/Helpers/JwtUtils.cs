@@ -13,7 +13,7 @@ namespace Final.Authorization
     public interface IJwtUtils
     {
         public string GenerateToken(Authentication user);
-        public JwtData ValidateToken(string token);
+        public JwtData? ValidateToken(string token);
         public Guid GetUserId(HttpContext httpContext);
     }
 
@@ -39,7 +39,6 @@ namespace Final.Authorization
                 new Claim("id", user.AuthId.ToString())
 
             };
-
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_config.GetSection("AppSettings:Secret").Value));
 
 
@@ -59,7 +58,7 @@ namespace Final.Authorization
             return jwt;
         }
 
-        public JwtData ValidateToken(string token)
+        public JwtData? ValidateToken(string token)
         {
             if (token == null)
                 return null;
@@ -89,12 +88,13 @@ namespace Final.Authorization
                 // return null if validation fails
                 return null;
             }
+
         }
 
         public Guid GetUserId(HttpContext httpContext)
         {
-            var data = (JwtData)httpContext.Items["User"];
-            return data.Id;
+            var Data = (JwtData?)httpContext.Items["User"];
+            return Data.Id;
         }
     }
 }

@@ -31,8 +31,8 @@ namespace Final.Controllers
         [HttpGet("/Get-Provider")]
         public async Task<ActionResult<ProviderData>> GetProviderDetails([FromQuery] GetProviderById ProviderId)
         {
-            var response = await _searchRepo.GetProvider(ProviderId);
-            return Ok(response);
+            var Response = await _searchRepo.GetProvider(ProviderId);
+            return Ok(Response);
         }
     }
 }

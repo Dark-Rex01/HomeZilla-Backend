@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.OpenApi.Services;
 using Realms.Sync;
+using System.Security.Authentication;
 
 namespace HomeZilla_Backend.Repositories.Customers
 {
@@ -28,7 +29,7 @@ namespace HomeZilla_Backend.Repositories.Customers
         public async Task<CustomerUserData?> GetUserData(Guid Id)
         {
             var Data = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
-            var Response = _mapper.Map<Customer, CustomerUserData>(Data);
+            var Response = _mapper.Map<Customer?, CustomerUserData>(Data);
             return Response;
         }
 
@@ -59,7 +60,7 @@ namespace HomeZilla_Backend.Repositories.Customers
             var Query = await _context.Authentication.Where(x => x.AuthId == Id).SingleOrDefaultAsync();
             if (!BCrypt.Net.BCrypt.Verify(Data.OldPassword, Query.PasswordHash))
             {
-                throw new BadHttpRequestException("Credentials are Incorrect");
+                throw new AuthenticationException("Password is Incorrect");
             }
             else
             {

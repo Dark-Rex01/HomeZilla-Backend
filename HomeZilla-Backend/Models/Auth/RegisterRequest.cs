@@ -16,7 +16,7 @@ namespace Final.Model.Auth
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string? Email { get; set; }
         [Required]
-        public string? UserRole { get; set; }
+        public string UserRole { get; set; } = String.Empty;
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         public string? Password { get; set; }

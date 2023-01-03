@@ -1,14 +1,7 @@
-﻿using AutoMapper;
-using Final.Authorization;
-using Final.Entities;
-using Final.Helpers;
-using Final.Model.Auth;
+﻿using Final.Model.Auth;
 using Final.Services;
 using HomeZilla_Backend.Models.Auth;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 
 namespace Final.Controllers
 {
@@ -18,17 +11,10 @@ namespace Final.Controllers
     public class AuthController : ControllerBase
     {
         private IAuthRepo _authService;
-        private IMapper _mapper;
-        private readonly AppSettings _appSettings;
 
-        public AuthController(
-            IAuthRepo userService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+        public AuthController(IAuthRepo userService)
         {
             _authService = userService;
-            _mapper = mapper;
-            _appSettings = appSettings.Value;
         }
 
         
@@ -46,7 +32,7 @@ namespace Final.Controllers
         public async Task<IActionResult> Register(RegisterRequest Request)
         {
             await _authService.Register(Request);
-            return Ok(new { message = "Verify your account to Login" });
+            return StatusCode(201, "Created Successfully");
         }
 
 
@@ -61,28 +47,21 @@ namespace Final.Controllers
         public async Task<ActionResult> ForgotPassword(ForgotPasswordRequest Request)
         {
             await _authService.ForgotPassword(Request);
-            return Ok(new { message = "Reset password after OTP verification!" });
+            return Ok(new { message = "Reset OTP is Sent!" });
         }
 
         [HttpPut("Reset-Password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordRequest Request)
         {
             await _authService.ResetPassword(Request);
-            return Ok(new { message = "Your Password has been changed successfully" });
+            return Ok(new { message = "Your Password has been changed Successfully" });
         }
 
-        [HttpPost("logout")]
-        public async Task<IActionResult> Logout(LogoutRequest request)
+        [HttpPost("Logout")]
+        public IActionResult Logout()
         {
-            try
-            {
-                await _authService.Logout(request);
-                return Ok(new { message = "Logged out successfully"});
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            Response.Headers.Remove("Authorization");
+            return NoContent();
         }
 
     }

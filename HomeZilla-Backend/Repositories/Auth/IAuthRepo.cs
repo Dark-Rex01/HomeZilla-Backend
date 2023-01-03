@@ -11,8 +11,6 @@ namespace Final.Services
         Task ForgotPassword(ForgotPasswordRequest Request);
         Task ResetPassword(ResetPasswordRequest Request);
         Task Verify(VerifyAccount VerifyData);
-
-        Task Logout(LogoutRequest Request);
     }
 
 }

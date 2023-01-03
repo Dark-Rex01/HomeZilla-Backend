@@ -9,12 +9,12 @@ using System.Security.Cryptography;
 using Final.Entities;
 using Microsoft.AspNetCore.Identity;
 using static System.Net.WebRequestMethods;
-using System.Runtime.Intrinsics.X86;
 using Microsoft.EntityFrameworkCore;
 using Final.MailServices;
 using HomeZilla_Backend.Models.Auth;
 using Realms.Sync;
 using Final.Services;
+using System.Security.Authentication;
 
 namespace HomeZilla_Backend.Repositories.Auth
 {
@@ -47,7 +47,7 @@ namespace HomeZilla_Backend.Repositories.Auth
             var User = await _context.Authentication.SingleOrDefaultAsync(x => x.Email == Request.Email);
             if (User == null || !User.IsVerified || !BCrypt.Net.BCrypt.Verify(Request.Password, User.PasswordHash))
             {
-                throw new BadHttpRequestException("Credentials are Incorrect");
+                throw new AuthenticationException("Email Or Password is Incorrect");
             }
             // authentication successful
             var Token = _jwtUtils.GenerateToken(User);
@@ -78,7 +78,7 @@ namespace HomeZilla_Backend.Repositories.Auth
 
                 if (Request.UserRole == Role.Customer.ToString())
                 {
-                    Customer customer = new();
+                    Customer? customer = new();
                     customer = _mapper.Map<RegisterRequest, Customer>(Request);
                     var res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
                     customer.CustomerUserID = res.AuthId;
@@ -89,9 +89,10 @@ namespace HomeZilla_Backend.Repositories.Auth
 
                 if (Request.UserRole == Role.Provider.ToString())
                 {
-                    Provider provider = new();
+                    Provider? provider = new();
                     provider = _mapper.Map<RegisterRequest, Provider>(Request);
-                    var res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
+                    Authentication? res = new();
+                    res = _context.Authentication.Where(x => x.Email == Request.Email).FirstOrDefault();
                     provider.ProviderUserID = res.AuthId;
                     _context.Provider.Add(provider);
                     await _context.SaveChangesAsync();
@@ -103,7 +104,7 @@ namespace HomeZilla_Backend.Repositories.Auth
 
             else
             {
-                throw new KeyNotFoundException("Email already registered");
+                throw new BadHttpRequestException("Email already registered");
             }
 
         }
@@ -113,10 +114,10 @@ namespace HomeZilla_Backend.Repositories.Auth
         public async Task Verify(VerifyAccount VerifyData)
         {
             var UserData = _context.Authentication.SingleOrDefault(x => x.OTP == VerifyData.OTP && x.Email == VerifyData.Email && DateTime.Now <= x.OTPExpiresAt);
-            if (UserData == null) throw new KeyNotFoundException("Invalid OTP or Expired");
+            if (UserData == null) throw new AuthenticationException("Invalid OTP or Expired");
             if (UserData.IsVerified)
             {
-                throw new KeyNotFoundException("User Already Verified");
+                throw new BadHttpRequestException("User Already Verified");
             }
             else
             {
@@ -134,7 +135,7 @@ namespace HomeZilla_Backend.Repositories.Auth
             var User = await _context.Authentication.SingleOrDefaultAsync(
                 x => x.Email == Request.Email && x.IsVerified);
 
-            if (User == null) throw new BadHttpRequestException("User not found");
+            if (User == null) throw new KeyNotFoundException("User Not Found");
 
             User.OTP = GenerateOtp();
             User.OTPExpiresAt = DateTime.Now.AddMinutes(5);
@@ -151,7 +152,7 @@ namespace HomeZilla_Backend.Repositories.Auth
             var User = await _context.Authentication.SingleOrDefaultAsync(x => x.OTP == Request.OTP && x.Email == Request.Email); ;
             if (User == null || DateTime.Now > User.OTPExpiresAt)
             {
-                throw new BadHttpRequestException("Invalid OTP");
+                throw new AuthenticationException("Invalid OTP");
             }
             else
             {
@@ -160,14 +161,6 @@ namespace HomeZilla_Backend.Repositories.Auth
                 _context.Authentication.Update(User);
                 await _context.SaveChangesAsync();
             }
-        }
-
-        //logout
-
-        public async Task Logout(LogoutRequest request)
-        {
-            request.Token = null;
-            await _context.SaveChangesAsync();
         }
 
         //OTP Generation
@@ -181,12 +174,12 @@ namespace HomeZilla_Backend.Repositories.Auth
 
         public async Task<Authentication> GetUser(string email = "")
         {
-            Authentication? result = new();
+            Authentication? Result = new();
             if (email != "")
             {
-                result = await _context.Authentication.Where(u => u.Email == email).FirstOrDefaultAsync();
+                Result = await _context.Authentication.Where(u => u.Email == email).FirstOrDefaultAsync();
             }
-            return result!;
+            return Result!;
         }
 
     }

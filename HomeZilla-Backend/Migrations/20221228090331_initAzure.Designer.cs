@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    [Migration("20221227152211_init")]
-    partial class init
+    [Migration("20221228090331_initAzure")]
+    partial class initAzure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -14,7 +14,7 @@ namespace Final.Model.Search
         [Required]
         public string? Email { get; set; }
         [Required]
-        public int MobileNumber { get; set; }
+        public long MobileNumber { get; set; }
         public string? Location { get; set; }
         public string? Description { get; set; }
         public List<ServiceData> ServiceData{ get; set; } = new List<ServiceData>();

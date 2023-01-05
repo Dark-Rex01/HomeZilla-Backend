@@ -50,13 +50,16 @@ namespace Final.Repositories.Search
             var query = await _context.ProviderServices.Where(c => c.ProviderId == ProviderId.Id)
                                                                .ToListAsync();
             var ProviderData = new ProviderData();
+            Console.WriteLine("okay");
             ProviderData = _mapper.Map<ProviderData>(Data);
+            Console.WriteLine("okay2");
             var serviceList = new List<ServiceData>();
             serviceList = _mapper.Map<List<ServiceData>>(query);
             foreach (var data in serviceList)
             {
                 ProviderData.ServiceData.Add(data);
             }
+            
             return ProviderData;
         }
     }

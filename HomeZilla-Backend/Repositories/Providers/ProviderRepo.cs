@@ -157,9 +157,9 @@ namespace HomeZilla_Backend.Repositories.Providers
         public async Task DeleteService(DeleteService Data, Guid Id)
         {
             var UserId = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            var ServiceData = await _context.ProviderServices.Where(x => x.Id == Data.Id 
-                                                             && x.ProviderId == UserId.ProviderUserID)
-                                                             .SingleOrDefaultAsync();   
+
+            var ServiceData = await _context.ProviderServices.Where(x => x.ProviderId == UserId.Id
+                                                             && x.Id == Data.Id).SingleOrDefaultAsync();
             _context.ProviderServices.Remove(ServiceData);
             await _context.SaveChangesAsync();
         }

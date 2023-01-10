@@ -163,5 +163,17 @@ namespace HomeZilla_Backend.Repositories.Providers
             _context.ProviderServices.Remove(ServiceData);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<AvailableService> CheckService(Guid Id)
+        {
+            var UserId = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
+            var ServiceData = await _context.ProviderServices.Where(x => x.ProviderId == UserId.Id).ToListAsync();
+            var AllService = Enum.GetValues(typeof(ServiceList)).Cast<ServiceList>().ToList();
+            var res = AllService.Where(p => ServiceData.All(p2 => p2.Service != p )).ToList();
+            AvailableService Result = new AvailableService();
+            Result.Services = res;
+            return Result;
+        }
+
     }
 }

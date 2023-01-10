@@ -17,5 +17,6 @@ namespace HomeZilla_Backend.Repositories.Providers
         Task AddService(AddService Data, Guid Id);
         Task DeleteService(DeleteService Data, Guid Id);
         Task UpdateService(UpdateService Data, Guid Id);
+        Task<AvailableService> CheckService(Guid Id);
     }
 }

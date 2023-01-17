@@ -102,6 +102,15 @@ namespace HomeZilla_Backend.Controllers
             return Ok(new { message = "Deleted a Service" });
         }
 
+<<<<<<< HEAD
        
+=======
+        [HttpGet("Check-Service"), Authorize(Role.Provider)]
+        public async Task<IActionResult> CheckService()
+        {
+            var Response = await _providerRepo.CheckService(_jwtUtils.GetUserId(HttpContext));
+            return Ok(Response);
+        }
+>>>>>>> 41ef7df0f5c0399b993c9e50ec2328757b04f5e1
     }
 }

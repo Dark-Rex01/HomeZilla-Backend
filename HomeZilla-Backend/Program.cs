@@ -14,6 +14,7 @@ using HomeZilla_Backend.Repositories.Customers;
 using HomeZilla_Backend.Services.BlobServices;
 using HomeZilla_Backend.Repositories.Providers;
 using HomeZilla_Backend.Repositories.Auth;
+using HomeZilla_Backend.Repositories.Analytics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +32,7 @@ builder.Services.AddScoped<ISearchRepo, SearchRepo>();
 builder.Services.AddScoped<IOrderRepo, OrderRepo>();
 builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
 builder.Services.AddScoped<IProviderRepo, ProviderRepo>();
+builder.Services.AddScoped<IAnalyticsRepo, AnalyticsRepo>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

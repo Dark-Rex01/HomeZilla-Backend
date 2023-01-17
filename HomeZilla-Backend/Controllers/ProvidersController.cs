@@ -101,5 +101,7 @@ namespace HomeZilla_Backend.Controllers
             await _providerRepo.DeleteService(Data, _jwtUtils.GetUserId(HttpContext));
             return Ok(new { message = "Deleted a Service" });
         }
+
+       
     }
 }

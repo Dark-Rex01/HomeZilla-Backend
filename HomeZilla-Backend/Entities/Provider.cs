@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HomeZilla_Backend.Entities;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Final.Entities
@@ -17,7 +18,7 @@ namespace Final.Entities
         [Required]
         public long MobileNumber { get; set; }
         public string? UserName { get; set; }
-        public string Location { get; set; } = String.Empty;
+        public Location Location { get; set; } 
         public string? Description { get; set; }
 
         [ForeignKey("provider")]

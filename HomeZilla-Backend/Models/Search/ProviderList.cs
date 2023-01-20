@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HomeZilla_Backend.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeZilla_Backend.Models.Search
 {
@@ -10,11 +11,12 @@ namespace HomeZilla_Backend.Models.Search
         public string? FirstName { get; set; }
         [Required]
         public string? LastName { get; set; }
+        public string? UserName { get; set; }
         [Required]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string? Email { get; set; }
         public long? MobileNumber { get; set; }
-        public string? Location { get; set; }
+        public Location Location { get; set; }
         public string? ProfilePicture { get; set; }
     }
 }

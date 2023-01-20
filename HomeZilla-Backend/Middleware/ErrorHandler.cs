@@ -1,5 +1,4 @@
-﻿using Realms.Sync.Exceptions;
-using System.Net;
+﻿using System.Net;
 using System.Security.Authentication;
 using System.Text.Json;
 

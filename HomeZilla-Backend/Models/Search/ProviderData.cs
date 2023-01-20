@@ -1,4 +1,5 @@
 ﻿using Final.Entities;
+using HomeZilla_Backend.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace Final.Model.Search
@@ -15,7 +16,7 @@ namespace Final.Model.Search
         public string? Email { get; set; }
         [Required]
         public long MobileNumber { get; set; }
-        public string? Location { get; set; }
+        public Location Location { get; set; }
         public string? Description { get; set; }
         public List<ServiceData> ServiceData{ get; set; } = new List<ServiceData>();
     }

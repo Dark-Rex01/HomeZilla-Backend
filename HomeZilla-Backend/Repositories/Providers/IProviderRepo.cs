@@ -1,4 +1,5 @@
 ﻿using Final.Entities;
+using HomeZilla_Backend.Entities;
 using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 
@@ -18,5 +19,6 @@ namespace HomeZilla_Backend.Repositories.Providers
         Task DeleteService(DeleteService Data, Guid Id);
         Task UpdateService(UpdateService Data, Guid Id);
         Task<AvailableService> CheckService(Guid Id);
+        Task<List<Location>> GetLocation();
     }
 }

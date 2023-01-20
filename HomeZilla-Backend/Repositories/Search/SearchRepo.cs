@@ -31,7 +31,7 @@ namespace Final.Repositories.Search
             var Ids = new List<Guid>();
             Ids = List.Select(x => x.ProviderId).ToList();
             var searchResult = new List<Provider>();
-            searchResult = await _context.Provider.Where(x => Ids.Contains(x.Id) && x.Location.StartsWith(SearchData.Location))
+            searchResult = await _context.Provider.Where(x => Ids.Contains(x.Id) && x.Location.ToString().StartsWith(SearchData.Location))
                                                   .ToListAsync();
             int count = searchResult.Count();
             searchResult = searchResult.Skip((SearchData.PageNumber - 1) * 6)

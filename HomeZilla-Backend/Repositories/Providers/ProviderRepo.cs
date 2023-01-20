@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Final.Data;
 using Final.Entities;
+using HomeZilla_Backend.Entities;
 using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Services.BlobServices;
@@ -173,6 +174,12 @@ namespace HomeZilla_Backend.Repositories.Providers
             AvailableService Result = new AvailableService();
             Result.Services = res;
             return Result;
+        }
+
+        public async Task<List<Location>> GetLocation()
+        {
+            var Response  = Enum.GetValues(typeof(Location)).Cast<Location>().ToList();
+            return Response;
         }
 
     }

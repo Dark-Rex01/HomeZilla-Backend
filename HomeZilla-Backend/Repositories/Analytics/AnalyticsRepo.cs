@@ -44,5 +44,22 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
+        public async Task<List<int>> GetDoughnutChart(Guid Id)
+        {
+            
+            var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
+            Console.WriteLine("ok");
+            var data = await _context.OrderDetails.Where(x => x.ProviderId == user.Id).ToListAsync();
+            var response = new List<int>();
+            //response = 
+            
+            foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+            {
+                Console.WriteLine(status);
+                response.Add(data.Where(x => x.ProviderId == user.Id).GroupBy(s => s.Status == status).Count());
+            }
+            return response;
+        }
+
     }
 }

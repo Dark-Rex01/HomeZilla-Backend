@@ -8,7 +8,6 @@ using HomeZilla_Backend.Services.BlobServices;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.OpenApi.Services;
-using Realms.Sync;
 using System.Security.Authentication;
 
 namespace HomeZilla_Backend.Repositories.Customers
@@ -100,9 +99,7 @@ namespace HomeZilla_Backend.Repositories.Customers
             int count = OrderData.Count();
             OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
                                  .Skip((Data.PageNumber - 1) * 10)
-                                 .
-                                 
-                                 (10)
+                                 .Take(10)
                                  .ToList();
             var Response = new OrderResponse();
             Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();

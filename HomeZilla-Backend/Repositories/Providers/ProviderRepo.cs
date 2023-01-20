@@ -176,7 +176,7 @@ namespace HomeZilla_Backend.Repositories.Providers
             return Result;
         }
 
-        public async Task<List<Location>> GetLocation()
+        public List<Location> GetLocation()
         {
             var Response  = Enum.GetValues(typeof(Location)).Cast<Location>().ToList();
             return Response;

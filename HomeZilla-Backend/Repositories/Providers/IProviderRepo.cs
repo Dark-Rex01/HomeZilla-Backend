@@ -19,6 +19,6 @@ namespace HomeZilla_Backend.Repositories.Providers
         Task DeleteService(DeleteService Data, Guid Id);
         Task UpdateService(UpdateService Data, Guid Id);
         Task<AvailableService> CheckService(Guid Id);
-        Task<List<Location>> GetLocation();
+        List<Location> GetLocation();
     }
 }

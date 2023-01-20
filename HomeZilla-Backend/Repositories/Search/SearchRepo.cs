@@ -31,8 +31,10 @@ namespace Final.Repositories.Search
             var Ids = new List<Guid>();
             Ids = List.Select(x => x.ProviderId).ToList();
             var searchResult = new List<Provider>();
-            searchResult = await _context.Provider.Where(x => Ids.Contains(x.Id) && x.Location.StartsWith(SearchData.Location))
-                                                  .ToListAsync();
+            searchResult = await _context.Provider.ToListAsync();
+            searchResult = searchResult.Where(x => Ids.Contains(x.Id) && x.Location.ToString().StartsWith(SearchData.Location, StringComparison.InvariantCultureIgnoreCase))
+                                                  .ToList();
+            Console.WriteLine(searchResult);
             int count = searchResult.Count();
             searchResult = searchResult.Skip((SearchData.PageNumber - 1) * 6)
                                        .Take(6)
@@ -40,7 +42,7 @@ namespace Final.Repositories.Search
             var Response = new SearchResponse();
             Response.Data = searchResult.Select(x => _mapper.Map<Provider, ProviderList>(x));
             Response.CurrentPage = SearchData.PageNumber;
-            Response.TotalPages = count / 6;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 6);
             return Response;
         }
 

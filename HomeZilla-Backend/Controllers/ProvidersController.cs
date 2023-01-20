@@ -108,5 +108,12 @@ namespace HomeZilla_Backend.Controllers
             var Response = await _providerRepo.CheckService(_jwtUtils.GetUserId(HttpContext));
             return Ok(Response);
         }
+        [HttpGet("Get-Location")]   
+        public IActionResult GetLocation()
+        {
+            var Response = _providerRepo.GetLocation();
+            return Ok(Response);
+        }
+        
     }
 }

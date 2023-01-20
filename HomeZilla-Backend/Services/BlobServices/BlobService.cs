@@ -41,7 +41,7 @@ namespace HomeZilla_Backend.Services.BlobServices
         }
 
         // Delete the image
-        public async Task Delete(string FileName)
+        public async Task Delete(string? FileName)
         {
             FileName = Path.GetFileName(FileName);
             BlobContainerClient client = new BlobContainerClient(_configuration.GetValue<string>("BlobConnectionString"), _configuration.GetValue<string>("BlobContainerName"));

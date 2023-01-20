@@ -3,7 +3,6 @@ using Final.Data;
 using Final.Entities;
 using HomeZilla_Backend.Models.Analytics;
 using Microsoft.EntityFrameworkCore;
-using Realms.Sync;
 
 namespace HomeZilla_Backend.Repositories.Analytics
 {

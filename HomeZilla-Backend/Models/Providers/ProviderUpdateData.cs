@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using HomeZilla_Backend.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeZilla_Backend.Models.Providers
 {
@@ -15,7 +16,7 @@ namespace HomeZilla_Backend.Models.Providers
         public string? UserName { get; set; }
 
         public long? MobileNumber { get; set; }
-        public string Location { get; set; } = String.Empty;
+        public Location Location { get; set; }
         public string? Description { get; set; }
     }
 }

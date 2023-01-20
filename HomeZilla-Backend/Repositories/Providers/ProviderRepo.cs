@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Final.Data;
 using Final.Entities;
+using HomeZilla_Backend.Entities;
 using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Services.BlobServices;
@@ -74,13 +75,13 @@ namespace HomeZilla_Backend.Repositories.Providers
                                                        .ToListAsync();
             int count = OrderData.Count();
             OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
-                                 .Skip((Data.PageNumber - 1) * 1)
-                                 .Take(1)
+                                 .Skip((Data.PageNumber - 1) * 10)
+                                 .Take(10)
                                  .ToList();
             var Response = new OrderResponse();
             Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
             Response.CurrentPage = Data.PageNumber;
-            Response.TotalPages = count / 1;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 10); 
             return Response;
         }
 
@@ -95,13 +96,13 @@ namespace HomeZilla_Backend.Repositories.Providers
                                                        .ToListAsync();
             int count = OrderData.Count();
             OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
-                                 .Skip((Data.PageNumber - 1) * 1)
-                                 .Take(1)
+                                 .Skip((Data.PageNumber - 1) * 10)
+                                 .Take(10)
                                  .ToList();
             var Response = new OrderResponse();
             Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
             Response.CurrentPage = Data.PageNumber;
-            Response.TotalPages = count / 1;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 10);
             return Response;
         }
 
@@ -173,6 +174,12 @@ namespace HomeZilla_Backend.Repositories.Providers
             AvailableService Result = new AvailableService();
             Result.Services = res;
             return Result;
+        }
+
+        public List<Location> GetLocation()
+        {
+            var Response  = Enum.GetValues(typeof(Location)).Cast<Location>().ToList();
+            return Response;
         }
 
     }

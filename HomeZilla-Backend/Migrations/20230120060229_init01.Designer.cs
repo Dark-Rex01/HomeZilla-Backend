@@ -4,6 +4,7 @@ using Final.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    partial class HomezillaContextModelSnapshot : ModelSnapshot
+    [Migration("20230120060229_init01")]
+    partial class init01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +170,8 @@ namespace HomeZillaBackend.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Location")
+                        .HasColumnType("int");
 
                     b.Property<long>("MobileNumber")
                         .HasColumnType("bigint");

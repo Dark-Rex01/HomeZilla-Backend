@@ -1,4 +1,5 @@
 ﻿using Final.Entities;
+using HomeZilla_Backend.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -18,7 +19,7 @@ namespace HomeZilla_Backend.Models.Providers
 
         public long? MobileNumber { get; set; }
         public string? ProfilePicture { get; set; }
-        public string Location { get; set; } = String.Empty;
+        public Location Location { get; set; } 
         public string? Description { get; set; }
     }
 }

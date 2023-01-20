@@ -5,7 +5,6 @@ using Final.MailServices;
 using Final.Repositories.Search;
 using Final.Repositories.Order;
 using Final.Services;
-using Lucene.Net.Support;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;

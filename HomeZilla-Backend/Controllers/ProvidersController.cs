@@ -109,9 +109,9 @@ namespace HomeZilla_Backend.Controllers
             return Ok(Response);
         }
         [HttpGet("Get-Location")]   
-        public async Task<IActionResult> GetLocation()
+        public IActionResult GetLocation()
         {
-            var Response = await _providerRepo.GetLocation();
+            var Response = _providerRepo.GetLocation();
             return Ok(Response);
         }
         

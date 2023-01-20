@@ -12,7 +12,6 @@ using static System.Net.WebRequestMethods;
 using Microsoft.EntityFrameworkCore;
 using Final.MailServices;
 using HomeZilla_Backend.Models.Auth;
-using Realms.Sync;
 using Final.Services;
 using System.Security.Authentication;
 

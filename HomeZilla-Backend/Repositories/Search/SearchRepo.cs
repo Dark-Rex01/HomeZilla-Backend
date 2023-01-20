@@ -42,7 +42,7 @@ namespace Final.Repositories.Search
             var Response = new SearchResponse();
             Response.Data = searchResult.Select(x => _mapper.Map<Provider, ProviderList>(x));
             Response.CurrentPage = SearchData.PageNumber;
-            Response.TotalPages = count / 6;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 6);
             return Response;
         }
 

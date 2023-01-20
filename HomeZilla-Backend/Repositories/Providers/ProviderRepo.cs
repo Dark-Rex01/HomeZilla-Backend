@@ -81,7 +81,7 @@ namespace HomeZilla_Backend.Repositories.Providers
             var Response = new OrderResponse();
             Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
             Response.CurrentPage = Data.PageNumber;
-            Response.TotalPages = (count / 10) + 1;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 10); 
             return Response;
         }
 
@@ -102,7 +102,7 @@ namespace HomeZilla_Backend.Repositories.Providers
             var Response = new OrderResponse();
             Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
             Response.CurrentPage = Data.PageNumber;
-            Response.TotalPages = (count / 10) + 1;
+            Response.TotalPages = (int)Math.Ceiling((double)count / 10);
             return Response;
         }
 

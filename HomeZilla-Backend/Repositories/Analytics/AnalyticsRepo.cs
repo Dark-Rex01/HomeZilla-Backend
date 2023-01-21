@@ -54,8 +54,9 @@ namespace HomeZilla_Backend.Repositories.Analytics
             
             foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
             {
-                Console.WriteLine(status);
-                response.Add(data.Where(x => x.ProviderId == user.Id).GroupBy(s => s.Status == status).Count());
+                var count = data.Where(x => x.ProviderId == user.Id).GroupBy(s => s.Status == status).Count();
+                response.Add(count);
+                Console.WriteLine(count);
             }
             return response;
         }

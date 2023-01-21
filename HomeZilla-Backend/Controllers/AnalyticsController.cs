@@ -42,7 +42,7 @@ namespace HomeZilla_Backend.Controllers
         public async Task<ActionResult> GetDoughnutChart()
         {
             var response = await _analyticsRepo.GetDoughnutChart(_jwtUtils.GetUserId(HttpContext));
-            return Ok();
+            return Ok(response);
         }
     }
 }

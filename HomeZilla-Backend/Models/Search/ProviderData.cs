@@ -15,9 +15,12 @@ namespace Final.Model.Search
         [Required]
         public string? Email { get; set; }
         [Required]
+        public string? UserName { get; set; }
+        [Required]
         public long MobileNumber { get; set; }
         public Location Location { get; set; }
         public string? Description { get; set; }
+        public string? ProfilePicture { get; set; }
         public List<ServiceData> ServiceData{ get; set; } = new List<ServiceData>();
     }
 }

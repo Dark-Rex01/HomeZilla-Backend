@@ -37,5 +37,12 @@ namespace HomeZilla_Backend.Controllers
             var response = await _analyticsRepo.GetTotalDeclinedOrders(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
+
+        [HttpGet("Get-Doughnut-Data"), Authorize(Role.Provider)]
+        public async Task<ActionResult> GetDoughnutChart()
+        {
+            var response = await _analyticsRepo.GetDoughnutChart(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
     }
 }

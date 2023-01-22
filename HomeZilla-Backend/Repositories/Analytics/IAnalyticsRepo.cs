@@ -1,4 +1,5 @@
 ﻿using HomeZilla_Backend.Models.Analytics;
+using System.Runtime.CompilerServices;
 
 namespace HomeZilla_Backend.Repositories.Analytics
 {
@@ -7,5 +8,6 @@ namespace HomeZilla_Backend.Repositories.Analytics
         Task<int> GetTotalOrders(Guid Id);
         Task<int> GetTotalAcceptedOrders(Guid Id);
         Task<int> GetTotalDeclinedOrders(Guid Id);
+        Task<List<int>> GetDoughnutChart(Guid Id);
     }
 }

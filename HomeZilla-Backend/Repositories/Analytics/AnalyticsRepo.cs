@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Final.Data;
 using Final.Entities;
-using HomeZilla_Backend.Models.Analytics;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeZilla_Backend.Repositories.Analytics
@@ -47,16 +46,25 @@ namespace HomeZilla_Backend.Repositories.Analytics
         {
             
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            Console.WriteLine("ok");
             var data = await _context.OrderDetails.Where(x => x.ProviderId == user.Id).ToListAsync();
             var response = new List<int>();
-            //response = 
             
             foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
             {
                 var count = data.Where(x => x.ProviderId == user.Id).GroupBy(s => s.Status == status).Count();
                 response.Add(count);
-                Console.WriteLine(count);
+            }
+            return response;
+        }
+
+        public async Task<List<int>> GetBarChart(Guid Id)
+        {
+            var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
+            var data = _context.OrderDetails.Where(x => x.ProviderId == user.Id && (x.AppointmentFrom >= DateTime.Today.AddMonths(-3) && x.AppointmentFrom <= DateTime.Today)).ToList();
+            var response = new List<int>();
+            for (int i = 0; i < 6; i++)
+            {
+                response.Add(_context.OrderDetails.Where(x => x.ProviderId == user.Id && (x.AppointmentFrom.Month == DateTime.Today.AddMonths(-i).Month )).Count());
             }
             return response;
         }

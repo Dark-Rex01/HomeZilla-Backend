@@ -1,6 +1,5 @@
 ﻿using Final.Authorization;
 using Final.Entities;
-using HomeZilla_Backend.Models.Analytics;
 using HomeZilla_Backend.Repositories.Analytics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +41,13 @@ namespace HomeZilla_Backend.Controllers
         public async Task<ActionResult> GetDoughnutChart()
         {
             var response = await _analyticsRepo.GetDoughnutChart(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+        [HttpGet("Get-BarChart-Data"), Authorize(Role.Provider)]
+        public async Task<ActionResult> GetBarChart()
+        {
+            var response = await _analyticsRepo.GetBarChart(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
     }

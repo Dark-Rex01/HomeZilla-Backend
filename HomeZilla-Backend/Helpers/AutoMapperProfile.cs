@@ -6,7 +6,6 @@ using Final.Model.Auth;
 using Final.Model.CustomerDashboard;
 using Final.Model.Order;
 using Final.Model.Search;
-using HomeZilla_Backend.Models.Analytics;
 using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Models.Search;
@@ -45,8 +44,6 @@ namespace Final.Helpers
                 .ForMember(o => o.Service, ex => ex.MapFrom(o => Enum.Parse(typeof(ServiceList), o.Service)));
             CreateMap<ProviderServices, GetService>();
 
-            //analytics 
-            CreateMap<OrderDetails, DoughChartResponse>();
         }
     }
 }

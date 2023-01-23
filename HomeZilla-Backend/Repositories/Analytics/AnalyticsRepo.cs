@@ -16,7 +16,57 @@ namespace HomeZilla_Backend.Repositories.Analytics
             _mapper = mapper;
         }
 
-        public async Task<int> GetTotalOrders(Guid Id)
+        //Customer Analytics
+        public async Task<int> GetCustomerTotalOrders(Guid Id)
+        {
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
+                                                      .CountAsync();
+            return response;
+        }
+        public async Task<int> GetCustomerTotalAcceptedOrders(Guid Id)
+        {
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
+                                                      .GroupBy(s => s.Status == OrderStatus.Accepted)
+                                                      .CountAsync();
+            return response;
+        }
+
+        public async Task<int> GetCustomerTotalCanceledOrders(Guid Id)
+        {
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
+                                                      .GroupBy(s => s.Status == OrderStatus.Cancelled)
+                                                      .CountAsync();
+            return response;
+        }
+        public async Task<int> GetCustomerTotalWaitingOrders(Guid Id)
+        {
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
+                                                      .GroupBy(s => s.Status == OrderStatus.Waiting)
+                                                      .CountAsync();
+            return response;
+        }
+
+        public async Task<List<int>> GetCustomerDoughnutChart(Guid Id)
+        {
+
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var data = await _context.OrderDetails.Where(x => x.CustomerId == user.Id).ToListAsync();
+            var response = new List<int>();
+
+            foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
+            {
+                var count = data.Where(x => x.CustomerId == user.Id).GroupBy(s => s.Status == status).Count();
+                response.Add(count);
+            }
+            return response;
+        }
+
+        //Provider Analytics
+        public async Task<int> GetProviderTotalOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var response = await _context.OrderDetails.Where(x =>x.ProviderId== user.Id)
@@ -24,7 +74,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
-        public async Task<int> GetTotalAcceptedOrders(Guid Id)
+        public async Task<int> GetProviderTotalAcceptedOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var response = await _context.OrderDetails.Where(x =>x.ProviderId== user.Id)
@@ -33,7 +83,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
-        public async Task<int> GetTotalDeclinedOrders(Guid Id)
+        public async Task<int> GetProviderTotalDeclinedOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id)
@@ -42,7 +92,8 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
-        public async Task<List<int>> GetDoughnutChart(Guid Id)
+
+        public async Task<List<int>> GetProviderDoughnutChart(Guid Id)
         {
             
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
@@ -57,7 +108,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
-        public async Task<List<int>> GetBarChart(Guid Id)
+        public async Task<List<int>> GetProviderBarChart(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var data = _context.OrderDetails.Where(x => x.ProviderId == user.Id && (x.AppointmentFrom >= DateTime.Today.AddMonths(-3) && x.AppointmentFrom <= DateTime.Today)).ToList();

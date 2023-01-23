@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeZilla_Backend.Controllers
 {
-    [Route("api/Providers/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AnalyticsController : ControllerBase
     {
@@ -17,37 +17,79 @@ namespace HomeZilla_Backend.Controllers
             _analyticsRepo = analyticsRepo;
             _jwtUtils= jwtUtils;
         }
-        [HttpGet("Get-All-Orders-Count"),Authorize(Role.Provider)]
-        public async Task<ActionResult<int>> GetAllOrdersCount()
+
+        //Customer Analytics
+
+        [HttpGet("Get-Customer-All-Orders-Count"), Authorize(Role.Customer)]
+        public async Task<ActionResult<int>> GetCustomerAllOrdersCount()
         {
-            var response = await _analyticsRepo.GetTotalOrders(_jwtUtils.GetUserId(HttpContext));
-            return Ok(response);
-        }
-        [HttpGet("Get-All-Accepted-Orders-Count"), Authorize(Role.Provider)]
-        public async Task<ActionResult<int>> GetAllAcceptedOrdersCount()
-        {
-            var response = await _analyticsRepo.GetTotalAcceptedOrders(_jwtUtils.GetUserId(HttpContext));
+            var response = await _analyticsRepo.GetCustomerTotalOrders(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
 
-        [HttpGet("Get-All-Declined-Orders-Count"), Authorize(Role.Provider)]
-        public async Task<ActionResult<int>> GetAllDeclinedOrdersCount()
+        [HttpGet("Get-Customer-Accepted-Orders-Count"), Authorize(Role.Customer)]
+        public async Task<ActionResult<int>> GetCustomerAcceptedOrdersCount()
         {
-            var response = await _analyticsRepo.GetTotalDeclinedOrders(_jwtUtils.GetUserId(HttpContext));
+            var response = await _analyticsRepo.GetCustomerTotalAcceptedOrders(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
 
-        [HttpGet("Get-Doughnut-Data"), Authorize(Role.Provider)]
-        public async Task<ActionResult> GetDoughnutChart()
+        [HttpGet("Get-Customer-Canceled-Orders-Count"), Authorize(Role.Customer)]
+        public async Task<ActionResult<int>> GetCustomerCanceledOrdersCount()
         {
-            var response = await _analyticsRepo.GetDoughnutChart(_jwtUtils.GetUserId(HttpContext));
+            var response = await _analyticsRepo.GetCustomerTotalCanceledOrders(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
 
-        [HttpGet("Get-BarChart-Data"), Authorize(Role.Provider)]
-        public async Task<ActionResult> GetBarChart()
+        [HttpGet("Get-Customer-Waiting-Orders-Count"), Authorize(Role.Customer)]
+        public async Task<ActionResult<int>> GetCustomerWaitingOrdersCount()
         {
-            var response = await _analyticsRepo.GetBarChart(_jwtUtils.GetUserId(HttpContext));
+            var response = await _analyticsRepo.GetCustomerTotalWaitingOrders(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+        [HttpGet("Get-Customer-Doughnut-Data"), Authorize(Role.Customer)]
+        public async Task<ActionResult> GetCustomerDoughnutChart()
+        {
+            var response = await _analyticsRepo.GetCustomerDoughnutChart(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+        //Providers Analytics
+
+        [HttpGet("Get-Provider-All-Orders-Count"),Authorize(Role.Provider)]
+        public async Task<ActionResult<int>> GetProviderAllOrdersCount()
+        {
+            var response = await _analyticsRepo.GetProviderTotalOrders(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+        [HttpGet("Get-Provider-All-Accepted-Orders-Count"), Authorize(Role.Provider)]
+        public async Task<ActionResult<int>> GetProviderAllAcceptedOrdersCount()
+        {
+            var response = await _analyticsRepo.GetProviderTotalAcceptedOrders(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+        [HttpGet("Get-Provider-All-Declined-Orders-Count"), Authorize(Role.Provider)]
+        public async Task<ActionResult<int>> GetProviderAllDeclinedOrdersCount()
+        {
+            var response = await _analyticsRepo.GetProviderTotalDeclinedOrders(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+
+    
+        [HttpGet("Get-Provider-Doughnut-Data"), Authorize(Role.Provider)]
+        public async Task<ActionResult> GetProviderDoughnutChart()
+        {
+            var response = await _analyticsRepo.GetProviderDoughnutChart(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
+        [HttpGet("Get-Provider-BarChart-Data"), Authorize(Role.Provider)]
+        public async Task<ActionResult> GetProviderBarChart()
+        {
+            var response = await _analyticsRepo.GetProviderBarChart(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
     }

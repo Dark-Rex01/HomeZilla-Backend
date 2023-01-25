@@ -117,7 +117,7 @@ app.UseCors(x => x
     .AllowAnyHeader()
     .AllowCredentials()
     .WithExposedHeaders("Authorization")
-    .WithOrigins("http://localhost:4200", "https://localhost:4200"));
+    .WithOrigins("https://homezilla360.azurewebsites.net", "https://localhost:4200"));
 
 app.UseMiddleware<JwtMiddleware>();
 

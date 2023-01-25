@@ -55,6 +55,13 @@ namespace HomeZilla_Backend.Controllers
             return Ok(response);
         }
 
+        [HttpGet("Get-Customer-LineChart-Data"), Authorize(Role.Customer)]
+        public async Task<ActionResult> GetcustomerLineChart()
+        {
+            var response = await _analyticsRepo.GetCustomerLineChart(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
+
         //Providers Analytics
 
         [HttpGet("Get-Provider-All-Orders-Count"),Authorize(Role.Provider)]

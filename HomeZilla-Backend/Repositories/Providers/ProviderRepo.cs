@@ -73,6 +73,7 @@ namespace HomeZilla_Backend.Repositories.Providers
             var OrderData = await _context.OrderDetails.Where(x => x.ProviderId == User.Id &&
                                                        x.Status == OrderStatus.Waiting)
                                                        .ToListAsync();
+          
             int count = OrderData.Count();
             OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
                                  .Skip((Data.PageNumber - 1) * 10)

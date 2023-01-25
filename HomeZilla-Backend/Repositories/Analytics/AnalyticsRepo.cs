@@ -64,6 +64,17 @@ namespace HomeZilla_Backend.Repositories.Analytics
             }
             return response;
         }
+        public async Task<List<int>> GetCustomerLineChart(Guid Id)
+        {
+            var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
+            var data = _context.OrderDetails.Where(x => x.CustomerId == user.Id && (x.AppointmentFrom >= DateTime.Today.AddMonths(-3) && x.AppointmentFrom <= DateTime.Today)).ToList();
+            var response = new List<int>();
+            for (int i = 0; i < 6; i++)
+            {
+                response.Add(_context.OrderDetails.Where(x => x.CustomerId == user.Id && (x.AppointmentFrom.Month == DateTime.Today.AddMonths(-i).Month)).Count());
+            }
+            return response;
+        }
 
         //Provider Analytics
         public async Task<int> GetProviderTotalOrders(Guid Id)
@@ -119,6 +130,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             }
             return response;
         }
+        
 
     }
 }

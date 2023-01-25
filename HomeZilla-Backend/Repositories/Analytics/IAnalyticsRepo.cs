@@ -11,6 +11,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
         Task<int> GetCustomerTotalCanceledOrders(Guid Id);
         Task<int> GetCustomerTotalWaitingOrders(Guid Id);
         Task<List<int>> GetCustomerDoughnutChart(Guid Id);
+        Task<List<int>> GetCustomerLineChart(Guid Id);
 
         //Provider Dashboard Analytics
         Task<int> GetProviderTotalOrders(Guid Id);

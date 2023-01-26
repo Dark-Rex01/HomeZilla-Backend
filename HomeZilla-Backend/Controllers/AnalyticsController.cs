@@ -77,10 +77,10 @@ namespace HomeZilla_Backend.Controllers
             return Ok(response);
         }
 
-        [HttpGet("Get-Provider-All-Declined-Orders-Count"), Authorize(Role.Provider)]
-        public async Task<ActionResult<int>> GetProviderAllDeclinedOrdersCount()
+        [HttpGet("Get-Provider-All-Expired-Orders-Count"), Authorize(Role.Provider)]
+        public async Task<ActionResult<int>> GetProviderAllExpiredOrdersCount()
         {
-            var response = await _analyticsRepo.GetProviderTotalDeclinedOrders(_jwtUtils.GetUserId(HttpContext));
+            var response = await _analyticsRepo.GetProviderTotalExpiredOrders(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
 

@@ -56,7 +56,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
 
             foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
             {
-                var count = data.Where(x => x.CustomerId == user.Id).GroupBy(s => s.Status == status).Count();
+                var count = data.Where(x => x.CustomerId == user.Id && x.Status == status).Count();
                 response.Add(count);
             }
             return response;
@@ -90,7 +90,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
 
-        public async Task<int> GetProviderTotalDeclinedOrders(Guid Id)
+        public async Task<int> GetProviderTotalExpiredOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.NoResponse)
@@ -108,7 +108,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             
             foreach (OrderStatus status in Enum.GetValues(typeof(OrderStatus)))
             {
-                var count = data.Where(x => x.ProviderId == user.Id).GroupBy(s => s.Status == status).Count();
+                var count = data.Where(x => x.ProviderId == user.Id && x.Status == status).Count();
                 response.Add(count);
             }
             return response;

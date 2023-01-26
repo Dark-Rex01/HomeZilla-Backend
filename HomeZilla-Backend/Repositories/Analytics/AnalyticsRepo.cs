@@ -93,7 +93,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
         public async Task<int> GetProviderTotalDeclinedOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Declined)
+            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.NoResponse)
                                                 .CountAsync();
             return response;
         }

@@ -27,26 +27,23 @@ namespace HomeZilla_Backend.Repositories.Analytics
         public async Task<int> GetCustomerTotalAcceptedOrders(Guid Id)
         {
             var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
-                                                      .GroupBy(s => s.Status == OrderStatus.Accepted)
-                                                      .CountAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id && x.Status == OrderStatus.Accepted)
+                                                .CountAsync();
             return response;
         }
 
         public async Task<int> GetCustomerTotalCanceledOrders(Guid Id)
         {
             var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
-                                                      .GroupBy(s => s.Status == OrderStatus.Cancelled)
-                                                      .CountAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id && x.Status == OrderStatus.Cancelled)
+                                                .CountAsync();
             return response;
         }
         public async Task<int> GetCustomerTotalWaitingOrders(Guid Id)
         {
             var user = await _context.Customer.Where(x => x.CustomerUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id)
-                                                      .GroupBy(s => s.Status == OrderStatus.Waiting)
-                                                      .CountAsync();
+            var response = await _context.OrderDetails.Where(x => x.CustomerId == user.Id && x.Status == OrderStatus.Waiting)
+                                                .CountAsync();
             return response;
         }
 
@@ -88,18 +85,16 @@ namespace HomeZilla_Backend.Repositories.Analytics
         public async Task<int> GetProviderTotalAcceptedOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x =>x.ProviderId== user.Id)
-                                                      .GroupBy(s =>s.Status == OrderStatus.Accepted)
-                                                      .CountAsync();
+            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Accepted)
+                                                 .CountAsync();
             return response;
         }
 
         public async Task<int> GetProviderTotalDeclinedOrders(Guid Id)
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id)
-                                                     .GroupBy(s => s.Status == OrderStatus.Declined)
-                                                     .CountAsync();
+            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Declined)
+                                                .CountAsync();
             return response;
         }
 

@@ -98,14 +98,17 @@ namespace HomeZilla_Backend.Repositories.Providers
                                                        (x.Status == OrderStatus.Accepted ||
                                                        x.Status == OrderStatus.Cancelled ||
                                                        x.Status == OrderStatus.Declined))
-                                                       .ToListAsync();
+                                                      .Join(_context.Customer, x => x.CustomerId, y => y.Id, (x, y) => new { Order = x, Customer = y })
+                                                      .Where(data => data.Order.CustomerId == data.Customer.Id)
+                                                      .ToListAsync();
+
             int count = OrderData.Count();
-            OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
+            OrderData = OrderData.Where(x => x.Order.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
                                  .Skip((Data.PageNumber - 1) * 10)
                                  .Take(10)
                                  .ToList();
             var Response = new OrderResponse();
-            Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
+            Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x.Order)).ToList();
             Response.CurrentPage = Data.PageNumber;
             Response.TotalPages = (int)Math.Ceiling((double)count / 10);
             return Response;

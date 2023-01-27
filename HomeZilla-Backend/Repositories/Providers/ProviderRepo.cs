@@ -6,6 +6,7 @@ using HomeZilla_Backend.Models.Customers;
 using HomeZilla_Backend.Models.Providers;
 using HomeZilla_Backend.Services.BlobServices;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Security.Authentication;
 
 namespace HomeZilla_Backend.Repositories.Providers
@@ -70,17 +71,20 @@ namespace HomeZilla_Backend.Repositories.Providers
         public async Task<OrderResponse> CurrentOrder(OrderQuery Data, Guid Id)
         {
             var User = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
-            var OrderData = await _context.OrderDetails.Where(x => x.ProviderId == User.Id &&
-                                                       x.Status == OrderStatus.Waiting)
+            
+            var OrderData = await _context.OrderDetails.Where(x => x.ProviderId == User.Id && x.Status == OrderStatus.Waiting)
+                                                       .Join(_context.Customer, x => x.CustomerId, y => y.Id, (x, y) => new {Order = x, Customer = y })
+                                                       .Where(data => data.Order.CustomerId == data.Customer.Id)
                                                        .ToListAsync();
-          
+
             int count = OrderData.Count();
-            OrderData = OrderData.Where(x => x.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
+            OrderData = OrderData.Where(x => x.Order.ServiceName.ToString().StartsWith(Data.ServiceName, StringComparison.InvariantCultureIgnoreCase))
                                  .Skip((Data.PageNumber - 1) * 10)
                                  .Take(10)
                                  .ToList();
+            
             var Response = new OrderResponse();
-            Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x)).ToList();
+            Response.Data = OrderData.Select(x => _mapper.Map<OrderDetails, OrderData>(x.Order)).ToList();
             Response.CurrentPage = Data.PageNumber;
             Response.TotalPages = (int)Math.Ceiling((double)count / 10); 
             return Response;

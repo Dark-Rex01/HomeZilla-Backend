@@ -97,8 +97,13 @@ namespace HomeZilla_Backend.Repositories.Analytics
                                                 .CountAsync();
             return response;
         }
-
-
+        public async Task<int> GetProviderTotalDeclinedOrders(Guid Id)
+        {
+            var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Declined)
+                                                .CountAsync();
+            return response;
+        }
         public async Task<List<int>> GetProviderDoughnutChart(Guid Id)
         {
             
@@ -126,6 +131,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
         
+
 
     }
 }

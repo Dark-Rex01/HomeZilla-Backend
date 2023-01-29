@@ -84,8 +84,13 @@ namespace HomeZilla_Backend.Controllers
             return Ok(response);
         }
 
+        [HttpGet("Get-Provider-All-Declined-Orders-Count"), Authorize(Role.Provider)]
+        public async Task<ActionResult<int>> GetProviderAllDeclinedOrdersCount()
+        {
+            var response = await _analyticsRepo.GetProviderTotalDeclinedOrders(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
 
-    
         [HttpGet("Get-Provider-Doughnut-Data"), Authorize(Role.Provider)]
         public async Task<ActionResult> GetProviderDoughnutChart()
         {

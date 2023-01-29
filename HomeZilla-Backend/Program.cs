@@ -88,7 +88,7 @@ builder.Services.Configure<Final.Helpers.AppSettings>(builder.Configuration.GetS
 
 // Injecting DbContext and Connection String
 builder.Services.AddDbContext<HomezillaContext>(options =>
-options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+options.UseSqlServer(builder.Configuration.GetConnectionString("_connectionString")));
 
 
 // JSON Serializer

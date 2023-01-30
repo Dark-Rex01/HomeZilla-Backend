@@ -20,5 +20,6 @@ namespace HomeZilla_Backend.Repositories.Analytics
         Task<int> GetProviderTotalDeclinedOrders(Guid Id);
         Task<List<int>> GetProviderDoughnutChart(Guid Id);
         Task<List<int>> GetProviderBarChart(Guid Id);
+        Task<int?> GetProviderTotalRevenue(Guid Id);
     }
 }

@@ -131,6 +131,13 @@ namespace HomeZilla_Backend.Repositories.Analytics
             return response;
         }
         
+        public async Task<int?> GetProviderTotalRevenue(Guid Id)
+        {
+            var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
+            var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Accepted)
+                                                      .Select(x => x.Cost).SumAsync();
+            return response;
+        }
 
 
     }

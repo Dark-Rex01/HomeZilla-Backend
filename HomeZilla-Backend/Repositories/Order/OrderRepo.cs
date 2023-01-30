@@ -19,7 +19,7 @@ namespace Final.Repositories.Order
         public async Task<string> BookOrder(BookOrder OrderData, Guid Id)
         {
             var Check = await _context.OrderDetails
-                                .AnyAsync(res => res.AppointmentTo >= OrderData.AppointmentTo && res.AppointmentFrom <= OrderData.AppointmentFrom);
+                                .AnyAsync(res => (res.AppointmentTo >= OrderData.AppointmentTo && res.AppointmentFrom <= OrderData.AppointmentFrom) && res.ProviderId == OrderData.ProviderId);
             if(Check)
             {
                 return "Provider is Not Available at the given time";
@@ -27,13 +27,16 @@ namespace Final.Repositories.Order
             else
             {
                 var userId = await _context.Customer.SingleAsync(x => x.CustomerUserID == Id);
+                ServiceList ServiceName;
+                Enum.TryParse(OrderData.ServiceName, out ServiceName);
+                var cost = await _context.ProviderServices.SingleAsync(x => x.ProviderId == OrderData.ProviderId && x.Service == ServiceName);
                 var Data = new OrderDetails();
                 Data = _mapper.Map<BookOrder, OrderDetails>(OrderData);
                 Data.CustomerId = userId.Id;
+                Data.Cost = cost.Price;
                 _context.OrderDetails.Add(Data);
                 await _context.SaveChangesAsync();
                 return "Placed the Order Successfully";
-                
             }
         }
         public async Task<string> CancelOrder(ChangeStatus changeStatus)

@@ -33,7 +33,7 @@ namespace Final.Repositories.Order
                 var Data = new OrderDetails();
                 Data = _mapper.Map<BookOrder, OrderDetails>(OrderData);
                 Data.CustomerId = userId.Id;
-                Data.Cost = cost.Price;
+                Data.Price = cost.Price;
                 _context.OrderDetails.Add(Data);
                 await _context.SaveChangesAsync();
                 return "Placed the Order Successfully";

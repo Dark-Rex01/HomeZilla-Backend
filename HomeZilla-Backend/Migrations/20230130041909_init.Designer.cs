@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    [Migration("20230120060229_init01")]
-    partial class init01
+    [Migration("20230130041909_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,6 +127,9 @@ namespace HomeZillaBackend.Migrations
 
                     b.Property<DateTime>("AppointmentTo")
                         .HasColumnType("datetime2");
+
+                    b.Property<int?>("Cost")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");

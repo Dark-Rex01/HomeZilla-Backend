@@ -125,11 +125,11 @@ namespace HomeZillaBackend.Migrations
                     b.Property<DateTime>("AppointmentTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Cost")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Price")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProviderId")
                         .HasColumnType("uniqueidentifier");

@@ -135,7 +135,7 @@ namespace HomeZilla_Backend.Repositories.Analytics
         {
             var user = await _context.Provider.Where(x => x.ProviderUserID == Id).SingleOrDefaultAsync();
             var response = await _context.OrderDetails.Where(x => x.ProviderId == user.Id && x.Status == OrderStatus.Accepted)
-                                                      .Select(x => x.Cost).SumAsync();
+                                                      .Select(x => x.Price).SumAsync();
             return response;
         }
 

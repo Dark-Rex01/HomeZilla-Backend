@@ -2,6 +2,8 @@
 using AutoMapper;
 using Final.Data;
 using Final.Entities;
+using Final.Helpers;
+using Final.MailServices;
 using Final.Model.Order;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +13,14 @@ namespace Final.Repositories.Order
     {
         private readonly HomezillaContext _context;
         private readonly IMapper _mapper;
-        public OrderRepo(HomezillaContext context, IMapper mapper)
+        private readonly IMailService _mailer;
+        private static MailTemplates mailTemplate = new MailTemplates();
+        public OrderRepo(HomezillaContext context, IMapper mapper,
+            IMailService mailer)
         {
             _context = context;
             _mapper = mapper;
+            _mailer = mailer;
         }
         public async Task<string> BookOrder(BookOrder OrderData, Guid Id)
         {
@@ -27,11 +33,16 @@ namespace Final.Repositories.Order
             else
             {
                 var userId = await _context.Customer.SingleAsync(x => x.CustomerUserID == Id);
+                var userEmail = await _context.Customer.Where(x => x.CustomerUserID == Id).Select(x=>x.Email).FirstOrDefaultAsync();
                 var Data = new OrderDetails();
                 Data = _mapper.Map<BookOrder, OrderDetails>(OrderData);
+               
                 Data.CustomerId = userId.Id;
                 _context.OrderDetails.Add(Data);
+                string Template = mailTemplate.OrderConfirmation(Data.ServiceName.ToString(),Data.AppointmentFrom, Data.AppointmentTo);
                 await _context.SaveChangesAsync();
+                await _mailer.Send(userEmail, "New Order", Template);
+                await _mailer.Send(providerEmail.ToString(), "New Order", Template);
                 return "Placed the Order Successfully";
                 
             }

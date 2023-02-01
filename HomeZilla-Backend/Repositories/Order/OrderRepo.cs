@@ -42,7 +42,6 @@ namespace Final.Repositories.Order
                 string Template = mailTemplate.OrderConfirmation(Data.ServiceName.ToString(),Data.AppointmentFrom, Data.AppointmentTo);
                 await _context.SaveChangesAsync();
                 await _mailer.Send(userEmail, "New Order", Template);
-                await _mailer.Send(providerEmail.ToString(), "New Order", Template);
                 return "Placed the Order Successfully";
                 
             }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeZillaBackend.Migrations
 {
     [DbContext(typeof(HomezillaContext))]
-    [Migration("20230120060229_init01")]
-    partial class init01
+    [Migration("20230130042351_initAzure")]
+    partial class initAzure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -130,6 +130,9 @@ namespace HomeZillaBackend.Migrations
 
                     b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("Price")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProviderId")
                         .HasColumnType("uniqueidentifier");

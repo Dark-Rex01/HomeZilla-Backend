@@ -11,6 +11,7 @@ namespace Final.Entities
         public DateTime AppointmentFrom { get; set; }
         public DateTime AppointmentTo { get; set; }
         public ServiceList ServiceName { get; set; }
+        public int? Price { get; set; }
         public OrderStatus Status { get; set; } = 0;
 
         [ForeignKey(nameof(customer))]

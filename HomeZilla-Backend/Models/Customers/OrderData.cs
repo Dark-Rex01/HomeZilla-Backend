@@ -9,6 +9,7 @@ namespace HomeZilla_Backend.Models.Customers
         public DateTime AppointmentTo { get; set; }
         public ServiceList ServiceName { get; set; }
         public OrderStatus Status { get; set; }
+        public int? Price { get; set; }
 
         public CustomerUserData? customer { get; set; }
     }

@@ -25,7 +25,7 @@ namespace Final.Repositories.Order
         public async Task<string> BookOrder(BookOrder OrderData, Guid Id)
         {
             var Check = await _context.OrderDetails
-                                .AnyAsync(res => res.AppointmentTo >= OrderData.AppointmentTo && res.AppointmentFrom <= OrderData.AppointmentFrom);
+                                .AnyAsync(res => (res.AppointmentTo >= OrderData.AppointmentTo && res.AppointmentFrom <= OrderData.AppointmentFrom) && res.ProviderId == OrderData.ProviderId);
             if(Check)
             {
                 return "Provider is Not Available at the given time";
@@ -33,17 +33,20 @@ namespace Final.Repositories.Order
             else
             {
                 var userId = await _context.Customer.SingleAsync(x => x.CustomerUserID == Id);
+                ServiceList ServiceName;
+                Enum.TryParse(OrderData.ServiceName, out ServiceName);
+                var cost = await _context.ProviderServices.SingleAsync(x => x.ProviderId == OrderData.ProviderId && x.Service == ServiceName);
                 var userEmail = await _context.Customer.Where(x => x.CustomerUserID == Id).Select(x=>x.Email).FirstOrDefaultAsync();
                 var Data = new OrderDetails();
                 Data = _mapper.Map<BookOrder, OrderDetails>(OrderData);
                
                 Data.CustomerId = userId.Id;
+                Data.Price = cost.Price;
                 _context.OrderDetails.Add(Data);
                 string Template = mailTemplate.OrderConfirmation(Data.ServiceName.ToString(),Data.AppointmentFrom, Data.AppointmentTo);
                 await _context.SaveChangesAsync();
                 await _mailer.Send(userEmail, "New Order", Template);
                 return "Placed the Order Successfully";
-                
             }
         }
         public async Task<string> CancelOrder(ChangeStatus changeStatus)

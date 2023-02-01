@@ -104,5 +104,12 @@ namespace HomeZilla_Backend.Controllers
             var response = await _analyticsRepo.GetProviderBarChart(_jwtUtils.GetUserId(HttpContext));
             return Ok(response);
         }
+
+        [HttpGet("Get-Provider-Revenue"), Authorize(Role.Provider)]
+        public async Task<ActionResult> GetProviderRevenue()
+        {
+            var response = await _analyticsRepo.GetProviderTotalRevenue(_jwtUtils.GetUserId(HttpContext));
+            return Ok(response);
+        }
     }
 }
